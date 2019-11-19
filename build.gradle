@@ -1,0 +1,79 @@
+plugins {
+	id 'java'
+	id 'maven'
+	id 'maven-publish'
+	id 'idea'
+	id 'eclipse'
+	id 'signing'
+	id 'checkstyle'
+	id 'jacoco'
+	id "com.diffplug.gradle.spotless" version "3.18.0"
+	id 'org.sonarqube' version '2.6.2'
+}
+
+apply from: 'dependencies.gradle'
+apply from: 'gradle/quality.gradle'
+apply from: 'gradle/deployment.gradle'
+
+description = "MapRoulette Java Client"
+
+sourceCompatibility=11
+targetCompatibility=11
+
+repositories
+{
+    mavenCentral()
+}
+
+dependencies
+{
+    implementation packages.commons
+    implementation packages.jackson
+    implementation packages.slf4j.api
+    implementation packages.http
+
+    // Lombok Annotations
+    implementation packages.lombok
+    annotationProcessor packages.lombok
+
+    testImplementation packages.junit
+    testImplementation packages.mockito
+
+    integrationTestImplementation packages.junit
+
+    checkstyle packages.checkstyle
+}
+
+/**
+ * Artifact related items
+ */
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts
+{
+    archives javadocJar
+    archives sourcesJar
+}
+
+/*
+ * This is to skip the tasks for which there is a skip<TaskName>=true
+ * environment variable
+ */
+def skippedTaskNames = System.getenv().findAll { key, value ->
+    key.startsWith("skip") && value.equalsIgnoreCase("true")
+}.keySet().collect { it.substring(4) }
+gradle.startParameter.excludedTaskNames += skippedTaskNames
+
+idea {
+    project {
+        languageLevel = '11'
+    }
+}

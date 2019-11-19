@@ -1,0 +1,27 @@
+{
+  "description": "DESCRIPTION",
+  "blurb": "BLURB",
+  "instruction": "INSTRUCTION",
+  "difficulty": "NORMAL",
+  "defaultPriority": "LOW",
+  "highPriorityRule": {
+    "condition": "AND",
+    "rules": [
+      {
+        "value": "priority_pd.3",
+        "type": "string",
+        "operator": "equal"
+      }
+    ]
+  },
+  "mediumPriorityRule": {
+    "condition": "OR",
+    "rules": [
+      {
+        "value": "priority_pd.2",
+        "type": "string",
+        "operator": "equal"
+      }
+    ]
+  }
+}

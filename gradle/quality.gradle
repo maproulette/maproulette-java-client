@@ -1,0 +1,72 @@
+jacoco
+{
+    toolVersion = versions.jacoco
+}
+
+sourceSets
+{
+    integrationTest
+    {
+        java
+        {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integrationTest/java')
+        }
+        resources.srcDir file('src/integrationTest/resources')
+    }
+}
+
+test
+{
+    testLogging
+    {
+        events "failed"
+        exceptionFormat = 'full'
+    }
+}
+
+task integrationTest(type: Test) {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    testLogging
+    {
+        events "failed"
+        exceptionFormat = 'full'
+    }
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+integrationTest.onlyIf { project.hasProperty('runIntegrationTests') }
+
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
+configurations
+{
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+spotless {
+   java {
+      importOrder 'static java', 'static javax', 'static org', 'static com', 'static scala', 'java', 'javax', 'org', 'com', 'scala', ''
+      removeUnusedImports()
+      eclipse().configFile 'config/format/code_format.xml'
+   }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled true
+        html.destination file("${buildDir}/reports/jacoco")
+    }
+}
+
+checkstyle
+{
+    toolVersion = versions.checkstyle
+}
