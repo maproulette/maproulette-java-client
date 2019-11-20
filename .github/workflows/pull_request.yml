@@ -19,4 +19,4 @@ jobs:
       - name: Build with Gradle
         env:
           sonar.login: ${{ secrets.SonarCloud }}
-        run: ./gradlew clean build sonarqube
+        run: ./gradlew clean build

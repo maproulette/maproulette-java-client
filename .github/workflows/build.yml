@@ -21,4 +21,4 @@ jobs:
           sonar.login: ${{ secrets.SonarCloud }}
           gpr_username: ${{ gpr_username }}
           gpr_password: ${{ gpr_password }}
-        run: ./gradlew clean build sonarqube publish
+        run: ./gradlew clean build publish
