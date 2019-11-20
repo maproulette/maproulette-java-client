@@ -19,6 +19,6 @@ jobs:
       - name: Build with Gradle
         env:
           sonar.login: ${{ secrets.SonarCloud }}
-          gpr_username: ${{ gpr_username }}
-          gpr_password: ${{ gpr_password }}
+          gpr_username: ${{ secrets.gpr_username }}
+          gpr_password: ${{ secrets.gpr_password }}
         run: ./gradlew clean build publish
