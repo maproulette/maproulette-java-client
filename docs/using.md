@@ -41,7 +41,10 @@ final var configuration = new MapRouletteConfiguration("https", "maproulette.org
 
 The API as mentioned previously focuses exclusively on building projects, challenges and tasks. So any MapRoulette API's that are using for retrieving data from MapRoulette are not included, although can be in the future.
 
-
+In the documentation below I will use 3 constant variables:
+- PROJECT_ID - which will be referenced any time I need to define a project identifier, usually this would be for the parent of a challenge.
+- CHALLENGE_ID - the same as above except obviously for the challenge identifier and will usually be used for the parent of a task.
+- TASK_ID - Used whenever I need to define a task identifier.
 
 #### API Objects
 The API objects map to the MapRoulette objects Project, Challenge and Tasks which together create a hierarchy of objects in that order in MapRoulette. The objects can be created through their constructors, however the recommended way of creating the objects is through the builder factory which is the method that will be shown in the examples.
@@ -55,7 +58,7 @@ The API objects map to the MapRoulette objects Project, Challenge and Tasks whic
 
 Creating a Project:
 ```java
-final var project = Project.builder("Project1")
+final var project = Project.builder().name("Project1")
                     .description("This is an example project")
                     .displayName("Example Project")
                     .enabled(true).build();
@@ -92,7 +95,8 @@ TODO
 Creating a Challenge:
 ```java
 // Not all properties are set, but follow the same pattern if they are need to be set.
-final var challenge = Challenge.builder(123, "Challenge1", "Challenge Instruction")
+final var challenge = Challenge.builder().parent(PROJECT_ID).name("Challenge1")
+                        .instruction("Challenge Instruction")
                         .difficulty(ChallengeDifficulty.EASY)
                         .priority(ChallengePriority.LOW)
                         .maxZoom(17).build();
@@ -110,7 +114,7 @@ final var challenge = Challenge.builder(123, "Challenge1", "Challenge Instructio
 Creating a Task:
 ```java
 final var geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[1.0,2.0]},\"properties\":{\"name\":\"property\"}}";
-final var task = Task.builder(13, "ExampleTask")
+final var task = Task.builder().parent(CHALLENGE_ID).name("ExampleTask")
                     .instruction("Example Task instruction")
                     .addGeojson(geoJson)
                     .addPoint(new PointInformation(5.0, 6.0))
@@ -137,28 +141,28 @@ final Optional<Project> project = projectAPI.get("NameOfProject");
 ```
 ```java
 // GET a specific project by it's identifier
-final Optional<Project> project = projectAPI.get(1234);
+final Optional<Project> project = projectAPI.get(PROJECT_ID);
 ```
 ```java
 // CREATE a new project
-final var newProject = Project.builder("ExampleProject").build();
+final var newProject = Project.builder().name("ExampleProject").build();
 final Project project = projectAPI.create(newProject);
 ```
 ```java
 // UPDATE an existing project
-final var updateProject = Project.builder("ExampleProject")
-                            .id(1234)
+final var updateProject = Project.builder().name("ExampleProject")
+                            .id(PROJECT_ID)
                             .description("Updated Description!")
                             .build();
 final Project project = projectAPI.update(updateProject);
 ```
 ```java
 // DELETE an existing project. This API will really only set the project up for later deletion, so flags for deletion, but doesn't actually delete it. A scheduled job that runs daily will delete this later.
-projectAPI.delete(1234);
+projectAPI.delete(PROJECT_ID);
 ```
 ```java
 // DELETE an existing project.
-projectAPI.forceDelete(1234);
+projectAPI.forceDelete(PROJECT_ID);
 ```
 
 #### ChallengeAPI
@@ -173,29 +177,34 @@ final var challengeAPI = new ChallengeAPI(configuration);
 ---
 ```java
 // GET a specific challenge by name within a specific project by project ID
-final Optional<Challenge> challenge = challengeAPI.get(12, "ExampleChallenge");
+final Optional<Challenge> challenge = challengeAPI.get(PROJECT_ID, "ExampleChallenge");
 ```
 ```java
 // GET a specific challenge by it's identifier
-final Optional<Challenge> challenge = challengeAPI.get(45);
+final Optional<Challenge> challenge = challengeAPI.get(CHALLENGE_ID);
 ```
 ```java
 // CREATE a new challenge
-final var challenge = Challenge.builder(12, "ExampleChallenge", "Example Instruction").build();
+final var challenge = Challenge.builder().parent(PROJECT_ID)
+                        .name("ExampleChallenge")
+                        .instruction("Example Instruction").build();
 final var newChallenge = challengeAPI.create(challenge);
 ```
 ```java
 // UPDATE a challenge
-final var challenge = Challenge.builder(12, "ExampleChallenge", "Example Instruction").id(1234).blurb("Updated Blurb").build();
+final var challenge = Challenge.builder().parent(PROJECT_ID)
+                        .name("ExampleChallenge")
+                        .instruction("Example Instruction")
+                        .id(CHALLENGE_ID).blurb("Updated Blurb").build();
 final var updatedChallenge = challengeAPI.update(challenge);
 ```
 ```java
 // DELETES a challenge - This API will really only set the challenge up for later deletion, so flags for deletion, but doesn't actually delete it. A scheduled job that runs daily will delete this later.
-challengeAPI.delete(1234);
+challengeAPI.delete(CHALLENGE_ID);
 ```
 ```java
 // DELETE a challenge immediately out of the database
-challengeAPI.forceDelete(1234);
+challengeAPI.forceDelete(CHALLENGE_ID);
 ```
 
 #### TaskAPI
@@ -210,31 +219,35 @@ final var taskAPI = new TaskAPI(configuration);
 ---
 ```java
 // GET a specific task by name within a specific challenge by challenge ID
-final Optional<Task> task = taskAPI.get(1234, "ExampleTask");
+final Optional<Task> task = taskAPI.get(CHALLENGE_ID, "ExampleTask");
 ```
 ```java
 // GET a specific task by it's identifier
-final Optional<Task> task = taskAPI.get(45);
+final Optional<Task> task = taskAPI.get(TASK_ID);
 ```
 ```java
 // CREATE a new task
 final var geojson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[1.0,2.0]},\"properties\":{\"name\":\"property\"}}";
-final var task = Task.builder(1234, "ExampleTask").addGeojson(geojson).build();
+final var task = Task.builder().parent(CHALLENGE_ID)
+                    .name("ExampleTask").addGeojson(geojson).build();
 final var newTask = taskAPI.create(task);
 ```
 ```java
 // UPDATE a task
 final var geojson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[1.0,2.0]},\"properties\":{\"name\":\"property\"}}";
-final var task = Task.builder(12, "ExampleTask").instruction("Updated Instruction").id(1234).geojson(geojson).build();
+final var task = Task.builder().parent(CHALLENGE_ID)
+                    .name("ExampleTask")
+                    .instruction("Updated Instruction")
+                    .id(TASK_ID).geojson(geojson).build();
 final var updatedTask = taskAPI.update(task);
 ```
 ```java
 // DELETES a task
-taskAPI.delete(1234);
+taskAPI.delete(TASK_ID);
 ```
 ```java
 // DELETE a task - the interface requires a forceDelete function so it is implemented but Tasks do not have a delayed deletion mechanism so forceDelete is identical to delete.
-taskAPI.forceDelete(1234);
+taskAPI.forceDelete(TASK_ID);
 ```
 
 #### BatchUploader
@@ -245,10 +258,11 @@ Example adding tasks to a single project and challenge. By setting -1 for all th
 final var configuration = new MapRouletteConfiguration("maproulette.org", 80, "DefaultProject", "API_KEY");
 final var uploader = new BatchUploader(configuration);
 // By setting the parent project identifier to -1 it will use the default project from the configuration
-final var challenge = Challenge.builder(-1, "PrimaryChallenge", "Primary Challenge Instruction").build();
+final var challenge = Challenge.builder().name("PrimaryChallenge")
+                        .instruction("Primary Challenge Instruction").build();
 final var geojson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[1.0,2.0]},\"properties\":{\"name\":\"property\"}}";
 for (final var i = 0; i < 10; i++) {
-    uploader.addTask(Task.builder(-1, "Task" + i).addGeojson(geojson).build());
+    uploader.addTask(Task.builder().name("Task" + i).addGeojson(geojson).build());
 }
 uploader.flush();
 ```
@@ -257,25 +271,17 @@ Example adding tasks to multiple projects and multiple challenges.
 ```java
 final var configuration = new MapRouletteConfiguration("maproulette.org", 80, "DefaultProject", "API_KEY");
 final var uploader = new BatchUploader(configuration);
-final var prefix = "zzzzzzProject";
-final var projectList = new ArrayList<Long>();
-for (int projectIndex = 0; projectIndex < 3; projectIndex++)
-{
-    final var projectIdentifier = this.getProjectAPI()
-            .create(Project.builder(prefix + projectIndex).build()).getId();
-    projectList.add(projectIdentifier);
-    for (int challengeIndex = 0; challengeIndex < 4; challengeIndex++)
-            {
-                final var newChallenge = Challenge
-                        .builder(parentIdentifier, "Challenge" + challengeIndex,
-                                String.format("Challenge %d instruction!", challengeIndex)).build();
-                for (int taskIndex = 0; taskIndex < 5; taskIndex++)
-                {
-                    uploader.addTask(newChallenge, this.getDefaultTask(-1, "Task" + taskIndex));
-                }
-            }
-}
-batchUploader.flushAll();
+final var batchUploader = new BatchUploader(configuration);
+        final var prefix = "zzzzzzProject";
+        final var projectList = new ArrayList<Long>();
+        for (int projectIndex = 0; projectIndex < NUMBER_PROJECTS; projectIndex++)
+        {
+            final var projectIdentifier = this.getProjectAPI()
+                    .create(Project.builder().name(prefix + projectIndex).build()).getId();
+            projectList.add(projectIdentifier);
+            this.addDefaultTasks(batchUploader, projectIdentifier);
+        }
+        batchUploader.flushAll();
 ```
 
 For more examples you can look at the integration tests, specifically [BatchUploaderIntegrationTest](../src/integrationTest/java/org/maproulette/client/batch/BatchUploaderIntegrationTest.java)
