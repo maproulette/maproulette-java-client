@@ -8,12 +8,11 @@ plugins {
 	id 'checkstyle'
 	id 'jacoco'
 	id "com.diffplug.gradle.spotless" version "3.18.0"
-	id 'org.sonarqube' version '2.6.2'
+	id 'org.sonarqube' version '2.7.1'
 }
 
 apply from: 'dependencies.gradle'
 apply from: 'gradle/quality.gradle'
-apply from: 'gradle/deployment.gradle'
 
 description = "MapRoulette Java Client"
 
@@ -59,8 +58,25 @@ task sourcesJar(type: Jar) {
 
 artifacts
 {
-    archives javadocJar
-    archives sourcesJar
+    archives javadocJar, sourcesJar
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/osmlab/maproulette-java-client")
+            credentials {
+                username = project.findProperty("gpr_username") ?: System.getenv("gpr_username")
+                password = project.findProperty("gpr_token") ?: System.getenv("gpr_token")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
 }
 
 /*
