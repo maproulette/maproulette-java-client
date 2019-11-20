@@ -1,8 +1,9 @@
 name: Main Build CI
 
-on: [push]
-  branches:
-    - master
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -17,4 +18,7 @@ jobs:
           java-version: 11
       - name: Build with Gradle
         env:
-        run: ./gradlew clean build sonarqube publish -Dsonar.login=${{ secrets.SonarCloud }} -Dgpr_username=${{ gpr_username }} -Dgpr_password=${{ gpr_password }}
+          sonar.login: ${{ secrets.SonarCloud }}
+          gpr_username: ${{ gpr_username }}
+          gpr_password: ${{ gpr_password }}
+        run: ./gradlew clean build publish
