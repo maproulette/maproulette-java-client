@@ -1,8 +1,9 @@
 name: Pull Request CI
 
-on: [pull_request]
-  branches:
-    - dev
+on:
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   build:
@@ -16,4 +17,6 @@ jobs:
         with:
           java-version: 11
       - name: Build with Gradle
-        run: ./gradlew clean build sonarqube -Dsonar.login=${{ secrets.SonarCloud }}
+        env:
+          sonar.login: ${{ secrets.SonarCloud }}
+        run: ./gradlew clean build
