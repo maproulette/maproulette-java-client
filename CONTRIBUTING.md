@@ -2,10 +2,6 @@
 
 Thanks for taking the time to contribute!
 
-## Where to ask a question
-
-TODO
-
 ## Suggestions and bug reports
 
 ### Reporting bugs
@@ -53,7 +49,8 @@ Once you have fixed an issue or added a new feature, it is time to submit [a pul
 
 ### Building
 
-TODO
+Building MapRoulette Java Client can be simply done using gradle:
+`./gradlew clean build`
 
 #### Log4j Properties
 
