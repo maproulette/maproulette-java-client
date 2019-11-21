@@ -22,7 +22,7 @@ jobs:
           sonar.login: ${{ secrets.SonarCloud }}
           gpr_username: ${{ secrets.gpr_username }}
           gpr_token: ${{ secrets.gpr_token }}
-        run: ./gradlew clean build publish
+        run: ./gradlew clean build publish --stacktrace
       - name: Create Release
         uses: actions/create-release@v1
         env:
