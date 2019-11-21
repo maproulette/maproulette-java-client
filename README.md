@@ -3,6 +3,7 @@
 [![Build](https://github.com/osmlab/maproulette-java-client/workflows/Build/badge.svg)](https://github.com/osmlab/maproulette-java-client/actions)
 [![quality gate](https://sonarcloud.io/api/project_badges/measure?project=org.maproulette.client%3Amaproulette-java-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.maproulette.client%3Amaproulette-java-client)
 [![Github Release](https://img.shields.io/github/v/release/osmlab/maproulette-java-client)](https://github.com/osmlab/maproulette-java-client/releases/tag/latest)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 The MapRoulette Java Client is a java library that makes it easy to create Projects, Challenges and Tasks. This library focuses primarily on creation, and does not currently implement any other API endpoints.
 
