@@ -22,14 +22,14 @@ Here is examples of adding the library into a project.
 ```
 dependencies
 {
-    implementation "org.maproulette.client:maproulette-java-client:0.1.0"
+    implementation "org.maproulette:maproulette-java-client:0.1.0"
 }
 ```
 
 - <img src="https://search.maven.org/assets/images/mvn.png" width="30" height="30"/> Maven:
 ```
 <dependency>
-    <groupId>org.maproulette.client</groupId>
+    <groupId>org.maproulette</groupId>
     <artifactId>maproulette-java-client</artifactId>
     <version>0.1.0</version>
 </dependency>
@@ -37,11 +37,11 @@ dependencies
 
 - <img src="https://search.maven.org/assets/images/sbt.svg" width="30" height="30"/> Scala SBT:
 ```
-libraryDependencies += "org.maproulette.client" % "maproulette-java-client" % "0.1.0"
+libraryDependencies += "org.maproulette" % "maproulette-java-client" % "0.1.0"
 ```
 
 - <img src="https://search.maven.org/assets/images/ivy.png" width="30" height="30"/> Apache Ivy:
 ```
-<dependency org="org.maproulette.client" name="maproulette-java-client" rev="0.1.0"/>
+<dependency org="org.maproulette" name="maproulette-java-client" rev="0.1.0"/>
 ```
 
