@@ -67,14 +67,20 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/osmlab/maproulette-java-client")
             credentials {
-                username = project.findProperty("gpr_username") ?: System.getenv("gpr_username")
-                password = project.findProperty("gpr_token") ?: System.getenv("gpr_token")
+                username = System.getProperty("gpr_username")
+                password = System.getProperty("gpr_token")
             }
         }
     }
     publications {
-        gpr(MavenPublication) {
-            from(components.java)
+        register("jar", MavenPublication) {
+            from(components["java"])
+            pom {
+                url.set("https://github.com/osmlab/maproulette-java-client.git")
+            }
+            groupId = "org.maproulette"
+            artifactId = "maproulette-java-client"
+            version = "0.1.0"
         }
     }
 }
