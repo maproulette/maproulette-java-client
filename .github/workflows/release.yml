@@ -21,7 +21,7 @@ jobs:
         env:
           sonar.login: ${{ secrets.SonarCloud }}
           gpr_username: ${{ secrets.gpr_username }}
-          gpr_password: ${{ secrets.gpr_token }}
+          gpr_token: ${{ secrets.gpr_token }}
         run: ./gradlew clean build publish
       - name: Create Release
         uses: actions/create-release@v1
