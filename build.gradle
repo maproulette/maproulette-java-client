@@ -80,7 +80,7 @@ publishing {
             }
             groupId = "org.maproulette"
             artifactId = "maproulette-java-client"
-            version = "0.1.0"
+            version = System.getProperty("version", project.property("version").toString())
         }
     }
 }
