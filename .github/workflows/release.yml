@@ -2,6 +2,8 @@ name: Build
 
 on:
   release:
+    types:
+      - created
     branches:
       - master
 
