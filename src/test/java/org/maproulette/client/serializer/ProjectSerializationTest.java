@@ -24,10 +24,27 @@ public class ProjectSerializationTest
         final var projectJson = mapper.writeValueAsString(project);
         final var deserializedProject = mapper.readValue(projectJson, Project.class);
 
-        Assertions.assertEquals(project.getName(), deserializedProject.getName());
-        Assertions.assertEquals(project.getId(), deserializedProject.getId());
-        Assertions.assertEquals(project.getDescription(), deserializedProject.getDescription());
-        Assertions.assertEquals(project.getDisplayName(), deserializedProject.getDisplayName());
-        Assertions.assertEquals(project.isEnabled(), deserializedProject.isEnabled());
+        this.verifyProjects(project, deserializedProject);
+    }
+
+    @Test
+    public void fromJsonTest() throws Exception
+    {
+        final var mapper = new ObjectMapper();
+        final var project = Project.builder().name("TestProject").description("TestDescription")
+                .displayName("TestDisplayName").enabled(true).id(6875L).build();
+        final var projectJson = mapper.writeValueAsString(project);
+        final var deserializedProject = Project.fromJson(projectJson);
+
+        this.verifyProjects(project, deserializedProject);
+    }
+
+    private void verifyProjects(final Project project1, final Project project2)
+    {
+        Assertions.assertEquals(project1.getName(), project2.getName());
+        Assertions.assertEquals(project1.getId(), project2.getId());
+        Assertions.assertEquals(project1.getDescription(), project2.getDescription());
+        Assertions.assertEquals(project1.getDisplayName(), project2.getDisplayName());
+        Assertions.assertEquals(project1.isEnabled(), project2.isEnabled());
     }
 }
