@@ -51,6 +51,25 @@ public class TaskSerializerTest
         this.verifyTask(task, deserializedTask);
     }
 
+    @Test
+    public void fromJsonTest() throws Exception
+    {
+        final var testFeatureString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[%s, %s]},\"properties\": {\"name\":\"%s\"}}";
+        final var mapper = new ObjectMapper();
+        final var pointList = Arrays.asList(new PointInformation(1.0, 2.0),
+                new PointInformation(5.4, 8.7));
+
+        final var task = Task.builder(343444454, "TestTask").id(12355655)
+                .instruction("TestInstruction").priority(ChallengePriority.HIGH)
+                .status(TaskStatus.DELETED).addPoints(pointList)
+                .addGeojson(String.format(testFeatureString, 1.0, 2.0, "Feature1"))
+                .addGeojson(String.format(testFeatureString, 5.0, 6.0, "Feature2")).build();
+        final var taskJson = mapper.writeValueAsString(task);
+
+        final var deserializedTask = Task.fromJson(taskJson);
+        this.verifyTask(task, deserializedTask);
+    }
+
     private void verifyTask(final Task task1, final Task task2)
     {
         Assertions.assertEquals(task1.getId(), task2.getId());

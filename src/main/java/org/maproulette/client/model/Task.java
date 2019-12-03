@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.exception.MapRouletteRuntimeException;
+import org.maproulette.client.utilities.Utilities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -203,6 +204,11 @@ public class Task implements IMapRouletteObject, Serializable
     public static TaskBuilder builder(final long parentIdentifier, final String name)
     {
         return taskBuilder().parent(parentIdentifier).name(name);
+    }
+
+    public static Task fromJson(final String json) throws MapRouletteException
+    {
+        return Utilities.fromJson(json, Task.class);
     }
 
     public TaskBuilder toBuilder(final boolean resetGeometry)

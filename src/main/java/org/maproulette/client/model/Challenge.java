@@ -2,6 +2,9 @@ package org.maproulette.client.model;
 
 import java.io.Serializable;
 
+import org.maproulette.client.exception.MapRouletteException;
+import org.maproulette.client.utilities.Utilities;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -63,4 +66,9 @@ public class Challenge implements IMapRouletteObject, Serializable
     private Integer defaultBasemap;
     private String defaultBasemapId;
     private String customBasemap;
+
+    public static Challenge fromJson(final String json) throws MapRouletteException
+    {
+        return Utilities.fromJson(json, Challenge.class);
+    }
 }
