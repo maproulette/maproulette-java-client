@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.model.Challenge;
 import org.maproulette.client.model.ChallengeDifficulty;
 import org.maproulette.client.model.ChallengePriority;
@@ -89,11 +90,11 @@ public class ChallengeSerializationTest
     /**
      * Tests that a challenge with no defaultPriority specified gets loaded as defaultPriority=LOW.
      *
-     * @throws IOException
+     * @throws Exception
      *             any failure when reading the challenge resource file
      */
     @Test
-    public void serializationNoDefaultPrioritySpecifiedTest() throws IOException
+    public void serializationNoDefaultPrioritySpecifiedTest() throws Exception
     {
         final var deserializedChallenge = this.getChallenge("challenges/testChallenge4.json");
 
@@ -112,11 +113,11 @@ public class ChallengeSerializationTest
      * Test if a challange can be deserialized from a test JSON file. The challenge resource json
      * contains no MapRoulette priority information.
      *
-     * @throws IOException
+     * @throws Exception
      *             any failure when reading the challenge resource file
      */
     @Test
-    public void serializationNoPriorityTest() throws IOException
+    public void serializationNoPriorityTest() throws Exception
     {
         // This line will deserialize the challenge, and if it fails we know it didn't work.
         final var deserializedChallenge = this.getChallenge("challenges/testChallenge2.json");
@@ -135,11 +136,11 @@ public class ChallengeSerializationTest
      * Test if a challenge can be deserialized from a test JSON file. The challenge contains
      * MapRoulette priority information for high and medium priority but not for low priority.
      *
-     * @throws IOException
+     * @throws Exception
      *             any failure when reading the challenge resource file
      */
     @Test
-    public void serializationTest() throws IOException
+    public void serializationTest() throws Exception
     {
         // This line will deserialize the challenge, and if it fails we know it didn't work.
         final var deserializedChallenge = this.getChallenge("challenges/testChallenge.json");
@@ -171,12 +172,11 @@ public class ChallengeSerializationTest
      * @param resource
      *            The path to the resource file
      * @return A {@link Challenge} object representing the provided resource.
-     * @throws IOException
+     * @throws MapRouletteException
      *             any failure when reading the challenge resource file
      */
-    private Challenge getChallenge(final String resource) throws IOException
+    private Challenge getChallenge(final String resource) throws MapRouletteException
     {
-        final var value = SerializerUtilities.getResourceAsString(resource);
-        return new ObjectMapper().readValue(value, Challenge.class);
+        return Challenge.fromJson(SerializerUtilities.getResourceAsString(resource));
     }
 }

@@ -19,30 +19,28 @@ For information on the API Library see the [documentation](docs/using.md).
 
 Here is examples of adding the library into a project.
 
-- <img src="https://search.maven.org/assets/images/gradle.png" width="30" height="30"/> Gradle Groovy DSL:
+<img src="https://search.maven.org/assets/images/gradle.png" width="30" height="30"/> Gradle Groovy DSL:
+
 ```
+repositories 
+{
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/osmlab/maproulette-java-client")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getProperty("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getProperty("PASSWORD")
+        }
+    }
+}
+
 dependencies
 {
     implementation "org.maproulette:maproulette-java-client:0.1.0"
 }
 ```
 
-- <img src="https://search.maven.org/assets/images/mvn.png" width="30" height="30"/> Maven:
-```
-<dependency>
-    <groupId>org.maproulette</groupId>
-    <artifactId>maproulette-java-client</artifactId>
-    <version>0.1.0</version>
-</dependency>
-```
+This project is published using Github Package Registry. Unfortunately one of the drawbacks of using Github Package Registry is that to download a package you have to be authenticated and have permissions to read packages. Hopefully this will change in the future, however for now you will have to supply a username and token to access the package. 
 
-- <img src="https://search.maven.org/assets/images/sbt.svg" width="30" height="30"/> Scala SBT:
-```
-libraryDependencies += "org.maproulette" % "maproulette-java-client" % "0.1.0"
-```
-
-- <img src="https://search.maven.org/assets/images/ivy.png" width="30" height="30"/> Apache Ivy:
-```
-<dependency org="org.maproulette" name="maproulette-java-client" rev="0.1.0"/>
-```
+The "credentials" section above shows that it will look for any properties found in gradle with `gpr.user` for your Github username and if not found it will look at any passed in system environment variables called `USERNAME`. Likewise it will do the same for password, except obviously looking for `gpr.key` and `PASSWORD` respectively.
 

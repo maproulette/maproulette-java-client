@@ -2,6 +2,9 @@ package org.maproulette.client.model;
 
 import java.io.Serializable;
 
+import org.maproulette.client.exception.MapRouletteException;
+import org.maproulette.client.utilities.Utilities;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -38,6 +41,11 @@ public class Project implements IMapRouletteObject, Serializable
     private String displayName;
     @Builder.Default
     private boolean enabled = false;
+
+    public static Project fromJson(final String json) throws MapRouletteException
+    {
+        return Utilities.fromJson(json, Project.class);
+    }
 
     /**
      * Projects have no parents, so will automatically return -1
