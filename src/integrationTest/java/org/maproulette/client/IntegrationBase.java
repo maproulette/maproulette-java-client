@@ -13,7 +13,7 @@ import org.maproulette.client.model.Project;
  */
 public class IntegrationBase
 {
-    public static final String DEFAULT_PROJECT_NAME = "IntegrationTestProject";
+    public static final String DEFAULT_PROJECT_NAME = "IntegrationTestProject4";
     public static final String ENVIRONMENT_HOST = "host";
     public static final String ENVIRONMENT_PORT = "port";
     public static final String ENVIRONMENT_API_KEY = "apiKey";
@@ -36,11 +36,10 @@ public class IntegrationBase
         return this.defaultProject;
     }
 
-    public TaskAPI getTaskAPI()
-    {
+    public TaskAPI getTaskAPI() {
         if (this.taskAPI == null)
         {
-            this.taskAPI = new TaskAPI(this.getConfiguration());
+            this.taskAPI = new TaskAPI(this.getConfiguration3());
         }
         return this.taskAPI;
     }
@@ -49,16 +48,27 @@ public class IntegrationBase
     {
         if (this.challengeAPI == null)
         {
-            this.challengeAPI = new ChallengeAPI(this.getConfiguration());
+            this.challengeAPI = new ChallengeAPI(this.getConfiguration3());
         }
         return this.challengeAPI;
+    }
+
+    public MapRouletteConfiguration getConfiguration2() throws MapRouletteException {
+        String config = "https://maproulette2.geo.apple.com:443:anni23_hosty54:487|064d098b-3ade-49d8-9e81-e5a96e50f1c5";
+        return MapRouletteConfiguration.parse(config);
+    }
+
+    public MapRouletteConfiguration getConfiguration3() {
+        this.configuration = new MapRouletteConfiguration("maproulette2.geo.apple.com", 443,
+                "487|064d098b-3ade-49d8-9e81-e5a96e50f1c5");
+        return configuration;
     }
 
     public ProjectAPI getProjectAPI()
     {
         if (this.projectAPI == null)
         {
-            this.projectAPI = new ProjectAPI(this.getConfiguration());
+            this.projectAPI = new ProjectAPI(this.getConfiguration3());
         }
         return this.projectAPI;
     }
@@ -95,7 +105,7 @@ public class IntegrationBase
     public void setup() throws MapRouletteException
     {
         // build the project that will be used to execute the integration tests for the challenges
-        this.defaultProjectIdentifier = this.projectAPI.create(this.defaultProject).getId();
+        this.defaultProjectIdentifier = getProjectAPI().create(this.defaultProject).getId();
     }
 
     public void teardown() throws MapRouletteException
