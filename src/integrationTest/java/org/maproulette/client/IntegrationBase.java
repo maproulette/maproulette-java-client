@@ -36,7 +36,8 @@ public class IntegrationBase
         return this.defaultProject;
     }
 
-    public TaskAPI getTaskAPI() {
+    public TaskAPI getTaskAPI()
+    {
         if (this.taskAPI == null)
         {
             this.taskAPI = new TaskAPI(this.getConfigurationExcludingProject());
@@ -53,10 +54,11 @@ public class IntegrationBase
         return this.challengeAPI;
     }
 
-    public MapRouletteConfiguration getConfigurationExcludingProject() {
+    public MapRouletteConfiguration getConfigurationExcludingProject()
+    {
         this.configuration = new MapRouletteConfiguration(ENVIRONMENT_HOST, 443,
                 ENVIRONMENT_API_KEY);
-        return configuration;
+        return this.configuration;
     }
 
     public ProjectAPI getProjectAPI()
