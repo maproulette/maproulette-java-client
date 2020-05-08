@@ -33,7 +33,7 @@ public class MapRouletteConfiguration implements Serializable
     private final int port;
     private final String scheme;
     private final String server;
-    private String defaultProjectName = "";
+    private final String defaultProjectName;
     @Setter
     private int batchSize;
 
@@ -107,6 +107,7 @@ public class MapRouletteConfiguration implements Serializable
         this.scheme = scheme;
         this.server = server;
         this.port = port;
+        this.defaultProjectName = "";
         this.apiKey = apiKey;
         this.batchSize = DEFAULT_BATCH_SIZE;
     }

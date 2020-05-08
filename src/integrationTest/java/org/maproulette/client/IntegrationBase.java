@@ -13,7 +13,7 @@ import org.maproulette.client.model.Project;
  */
 public class IntegrationBase
 {
-    public static final String DEFAULT_PROJECT_NAME = "IntegrationTestProject4";
+    public static final String DEFAULT_PROJECT_NAME = "IntegrationTestProject1";
     public static final String ENVIRONMENT_HOST = "host";
     public static final String ENVIRONMENT_PORT = "port";
     public static final String ENVIRONMENT_API_KEY = "apiKey";
@@ -102,7 +102,7 @@ public class IntegrationBase
     public void setup() throws MapRouletteException
     {
         // build the project that will be used to execute the integration tests for the challenges
-        this.defaultProjectIdentifier = getProjectAPI().create(this.defaultProject).getId();
+        this.defaultProjectIdentifier = this.getProjectAPI().create(this.defaultProject).getId();
     }
 
     public void teardown() throws MapRouletteException
@@ -110,7 +110,7 @@ public class IntegrationBase
         // remove the project that is used to execute the integration tests for the challenges
         if (this.defaultProjectIdentifier != -1)
         {
-            this.projectAPI.forceDelete(this.defaultProjectIdentifier);
+            this.getProjectAPI().forceDelete(this.defaultProjectIdentifier);
         }
     }
 }
