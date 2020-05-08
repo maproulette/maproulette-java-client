@@ -85,8 +85,7 @@ public class MapRouletteConfiguration implements Serializable
         this(HttpHost.DEFAULT_SCHEME_NAME + "s", server, port, projectName, apiKey);
     }
 
-    public MapRouletteConfiguration(final String server, final int port,
-                                    final String apiKey)
+    public MapRouletteConfiguration(final String server, final int port, final String apiKey)
     {
         this(HttpHost.DEFAULT_SCHEME_NAME + "s", server, port, apiKey);
     }

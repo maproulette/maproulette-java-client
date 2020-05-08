@@ -64,8 +64,7 @@ public class TaskAPIIntegrationTest extends IntegrationBase
         this.compare(toCreate, created.get());
 
         final var update = created.get().toBuilder().instruction("UpdatedInstruction")
-                .status(TaskStatus.FIXED).name("UpdateTaskName")
-                .resetGeometry()
+                .status(TaskStatus.FIXED).name("UpdateTaskName").resetGeometry()
                 .addGeojson(String.format(TestConstants.FEATURE_STRING, 3.1, 4.2, "UpdateGeometry"))
                 .build();
         final var updatedTask = this.getTaskAPI().update(update);
