@@ -39,7 +39,7 @@ public class IntegrationBase
     public TaskAPI getTaskAPI() {
         if (this.taskAPI == null)
         {
-            this.taskAPI = new TaskAPI(this.getConfiguration3());
+            this.taskAPI = new TaskAPI(this.getConfigurationExcludingProject());
         }
         return this.taskAPI;
     }
@@ -48,19 +48,14 @@ public class IntegrationBase
     {
         if (this.challengeAPI == null)
         {
-            this.challengeAPI = new ChallengeAPI(this.getConfiguration3());
+            this.challengeAPI = new ChallengeAPI(this.getConfigurationExcludingProject());
         }
         return this.challengeAPI;
     }
 
-    public MapRouletteConfiguration getConfiguration2() throws MapRouletteException {
-        String config = "https://maproulette2.geo.apple.com:443:anni23_hosty54:487|064d098b-3ade-49d8-9e81-e5a96e50f1c5";
-        return MapRouletteConfiguration.parse(config);
-    }
-
-    public MapRouletteConfiguration getConfiguration3() {
-        this.configuration = new MapRouletteConfiguration("maproulette2.geo.apple.com", 443,
-                "487|064d098b-3ade-49d8-9e81-e5a96e50f1c5");
+    public MapRouletteConfiguration getConfigurationExcludingProject() {
+        this.configuration = new MapRouletteConfiguration(ENVIRONMENT_HOST, 443,
+                ENVIRONMENT_API_KEY);
         return configuration;
     }
 
@@ -68,7 +63,7 @@ public class IntegrationBase
     {
         if (this.projectAPI == null)
         {
-            this.projectAPI = new ProjectAPI(this.getConfiguration3());
+            this.projectAPI = new ProjectAPI(this.getConfigurationExcludingProject());
         }
         return this.projectAPI;
     }
