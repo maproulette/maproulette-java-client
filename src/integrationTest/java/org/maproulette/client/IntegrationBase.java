@@ -134,16 +134,16 @@ public class IntegrationBase
 
     public Project buildProject()
     {
-        return Project.builder().name("Project name")
-                .description("Project Description ").displayName("Project Display name").enabled(true)
-                .build();
+        return Project.builder().name("Project name").description("Project Description ")
+                .displayName("Project Display name").enabled(true).build();
     }
 
     public void setup() throws MapRouletteException
     {
         // build the project that will be used to execute the integration tests for the challenges
         this.defaultProjectIdentifier = this.getProjectAPI().create(this.defaultProject).getId();
-        this.projectIdentifier = this.getProjectAPIForNewConfiguration().create(this.buildProject()).getId();
+        this.projectIdentifier = this.getProjectAPIForNewConfiguration().create(this.buildProject())
+                .getId();
     }
 
     public void teardown() throws MapRouletteException
@@ -153,7 +153,8 @@ public class IntegrationBase
         {
             this.getProjectAPI().forceDelete(this.defaultProjectIdentifier);
         }
-        if (this.getNewProjectIdentifier() != -1) {
+        if (this.getNewProjectIdentifier() != -1)
+        {
             this.getProjectAPIForNewConfiguration().forceDelete(this.getNewProjectIdentifier());
         }
     }

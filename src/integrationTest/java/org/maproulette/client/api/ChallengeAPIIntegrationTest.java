@@ -39,7 +39,8 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
     public void basicAPINewConfigurationTest() throws MapRouletteException
     {
         final var toCreate = this.getBasicChallengeForNewConfiguration();
-        final var createdChallengeIdentifier = this.getChallengeAPIForNewConfiguration().create(toCreate).getId();
+        final var createdChallengeIdentifier = this.getChallengeAPIForNewConfiguration()
+                .create(toCreate).getId();
         Assertions.assertNotEquals(-1, createdChallengeIdentifier);
     }
 

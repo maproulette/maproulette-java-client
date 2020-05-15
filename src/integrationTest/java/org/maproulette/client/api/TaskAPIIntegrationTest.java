@@ -46,9 +46,11 @@ public class TaskAPIIntegrationTest extends IntegrationBase
     }
 
     @Test
-    public void basicAPINewConfigurationTest() throws MapRouletteException {
+    public void basicAPINewConfigurationTest() throws MapRouletteException
+    {
         final var defaultTask = this.getDefaultTaskForNewConfiguration("TestTask");
-        final var createdTaskIdentifier = this.getTaskAPIForNewConfiguration().create(defaultTask).getId();
+        final var createdTaskIdentifier = this.getTaskAPIForNewConfiguration().create(defaultTask)
+                .getId();
         Assertions.assertNotEquals(-1, createdTaskIdentifier);
     }
 
@@ -110,8 +112,8 @@ public class TaskAPIIntegrationTest extends IntegrationBase
 
     private Task getDefaultTaskForNewConfiguration(final String name)
     {
-        return Task.builder(this.createdChallengeForNewConfiguration.getId(), name).instruction("TestInstruction")
-                .priority(ChallengePriority.HIGH)
+        return Task.builder(this.createdChallengeForNewConfiguration.getId(), name)
+                .instruction("TestInstruction").priority(ChallengePriority.HIGH)
                 .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.1, 2.2, "TestGeometry"))
                 .build();
     }
