@@ -25,10 +25,16 @@ public class IntegrationBase
             .description("Project Description").displayName("Project Displayname").enabled(true)
             .build();
     private long defaultProjectIdentifier = -1;
+    private long projectIdentifier = -1;
 
     public long getDefaultProjectIdentifier()
     {
         return this.defaultProjectIdentifier;
+    }
+
+    public long getNewProjectIdentifier()
+    {
+        return this.projectIdentifier;
     }
 
     public Project getDefaultProject()
@@ -40,12 +46,30 @@ public class IntegrationBase
     {
         if (this.taskAPI == null)
         {
+            this.taskAPI = new TaskAPI(this.getConfiguration());
+        }
+        return this.taskAPI;
+    }
+
+    public TaskAPI getTaskAPIForNewConfiguration()
+    {
+        if (this.taskAPI == null)
+        {
             this.taskAPI = new TaskAPI(this.getConfigurationExcludingProject());
         }
         return this.taskAPI;
     }
 
     public ChallengeAPI getChallengeAPI()
+    {
+        if (this.challengeAPI == null)
+        {
+            this.challengeAPI = new ChallengeAPI(this.getConfiguration());
+        }
+        return this.challengeAPI;
+    }
+
+    public ChallengeAPI getChallengeAPIForNewConfiguration()
     {
         if (this.challengeAPI == null)
         {
@@ -62,6 +86,15 @@ public class IntegrationBase
     }
 
     public ProjectAPI getProjectAPI()
+    {
+        if (this.projectAPI == null)
+        {
+            this.projectAPI = new ProjectAPI(this.getConfiguration());
+        }
+        return this.projectAPI;
+    }
+
+    public ProjectAPI getProjectAPIForNewConfiguration()
     {
         if (this.projectAPI == null)
         {
@@ -99,10 +132,18 @@ public class IntegrationBase
         return this.configuration;
     }
 
+    public Project buildProject()
+    {
+        return Project.builder().name("Project name")
+                .description("Project Description ").displayName("Project Display name").enabled(true)
+                .build();
+    }
+
     public void setup() throws MapRouletteException
     {
         // build the project that will be used to execute the integration tests for the challenges
         this.defaultProjectIdentifier = this.getProjectAPI().create(this.defaultProject).getId();
+        this.projectIdentifier = this.getProjectAPIForNewConfiguration().create(this.buildProject()).getId();
     }
 
     public void teardown() throws MapRouletteException
@@ -111,6 +152,9 @@ public class IntegrationBase
         if (this.defaultProjectIdentifier != -1)
         {
             this.getProjectAPI().forceDelete(this.defaultProjectIdentifier);
+        }
+        if (this.getNewProjectIdentifier() != -1) {
+            this.getProjectAPIForNewConfiguration().forceDelete(this.getNewProjectIdentifier());
         }
     }
 }

@@ -18,6 +18,7 @@ import org.maproulette.client.model.TaskStatus;
 public class TaskAPIIntegrationTest extends IntegrationBase
 {
     private Challenge createdChallenge = null;
+    private Challenge createdChallengeForNewConfiguration = null;
 
     @BeforeEach
     public void setup() throws MapRouletteException
@@ -29,6 +30,12 @@ public class TaskAPIIntegrationTest extends IntegrationBase
                         .name("TestChallenge").instruction("TestInstruction")
                         .defaultPriority(ChallengePriority.HIGH).build());
 
+        // create challenge to run the task api tests for new configuration
+        this.createdChallengeForNewConfiguration = this.getChallengeAPIForNewConfiguration()
+                .create(Challenge.builder().parent(this.getNewProjectIdentifier())
+                        .name("TestChallenge").instruction("TestInstruction")
+                        .defaultPriority(ChallengePriority.HIGH).build());
+
     }
 
     @AfterEach
@@ -36,6 +43,13 @@ public class TaskAPIIntegrationTest extends IntegrationBase
     {
         // This will remove the project and all child objects, so clean up everything
         super.teardown();
+    }
+
+    @Test
+    public void basicAPINewConfigurationTest() throws MapRouletteException {
+        final var defaultTask = this.getDefaultTaskForNewConfiguration("TestTask");
+        final var createdTaskIdentifier = this.getTaskAPIForNewConfiguration().create(defaultTask).getId();
+        Assertions.assertNotEquals(-1, createdTaskIdentifier);
     }
 
     @Test
@@ -89,6 +103,14 @@ public class TaskAPIIntegrationTest extends IntegrationBase
     private Task getDefaultTask(final String name)
     {
         return Task.builder(this.createdChallenge.getId(), name).instruction("TestInstruction")
+                .priority(ChallengePriority.HIGH)
+                .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.1, 2.2, "TestGeometry"))
+                .build();
+    }
+
+    private Task getDefaultTaskForNewConfiguration(final String name)
+    {
+        return Task.builder(this.createdChallengeForNewConfiguration.getId(), name).instruction("TestInstruction")
                 .priority(ChallengePriority.HIGH)
                 .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.1, 2.2, "TestGeometry"))
                 .build();

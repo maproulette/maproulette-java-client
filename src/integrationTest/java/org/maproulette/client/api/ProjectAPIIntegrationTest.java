@@ -20,6 +20,13 @@ import org.maproulette.client.model.Project;
 public class ProjectAPIIntegrationTest extends IntegrationBase
 {
     @Test
+    public void basicAPINewConfigurationTest() throws MapRouletteException {
+        final var project = this.buildProject();
+        final var projectIdentifier = this.getProjectAPIForNewConfiguration().create(project).getId();
+        Assertions.assertNotEquals(-1, projectIdentifier);
+    }
+
+    @Test
     public void basicAPITest() throws MapRouletteException
     {
         final var project = this.getDefaultProject();
