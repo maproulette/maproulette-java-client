@@ -26,6 +26,9 @@ public class IntegrationBase
             .build();
     private long defaultProjectIdentifier = -1;
     private long projectIdentifier = -1;
+    private String host;
+    private int port;
+    private String apiKey;
 
     public long getDefaultProjectIdentifier()
     {
@@ -80,8 +83,11 @@ public class IntegrationBase
 
     public MapRouletteConfiguration getConfigurationExcludingProject()
     {
-        this.configuration = new MapRouletteConfiguration(ENVIRONMENT_HOST, 443,
-                ENVIRONMENT_API_KEY);
+        if (this.configuration == null)
+        {
+            this.configurationParamsSetUp();
+            this.configuration = new MapRouletteConfiguration(this.host, this.port, this.apiKey);
+        }
         return this.configuration;
     }
 
@@ -107,29 +113,33 @@ public class IntegrationBase
     {
         if (this.configuration == null)
         {
-            var host = System.getenv(ENVIRONMENT_HOST);
-            if (StringUtils.isEmpty(host))
-            {
-                host = "localhost";
-            }
-            int port;
-            try
-            {
-                port = Integer.parseInt(System.getenv(ENVIRONMENT_PORT));
-            }
-            catch (final NumberFormatException e)
-            {
-                port = 9000;
-            }
-            var apiKey = System.getenv(ENVIRONMENT_API_KEY);
-            if (StringUtils.isEmpty(apiKey))
-            {
-                apiKey = "test";
-            }
-            this.configuration = new MapRouletteConfiguration(host, port, DEFAULT_PROJECT_NAME,
-                    apiKey);
+            this.configurationParamsSetUp();
+            this.configuration = new MapRouletteConfiguration(this.host, this.port,
+                    DEFAULT_PROJECT_NAME, this.apiKey);
         }
         return this.configuration;
+    }
+
+    private void configurationParamsSetUp()
+    {
+        this.host = System.getenv(ENVIRONMENT_HOST);
+        if (StringUtils.isEmpty(this.host))
+        {
+            this.host = "localhost";
+        }
+        try
+        {
+            this.port = Integer.parseInt(System.getenv(ENVIRONMENT_PORT));
+        }
+        catch (final NumberFormatException e)
+        {
+            this.port = 9000;
+        }
+        this.apiKey = System.getenv(ENVIRONMENT_API_KEY);
+        if (StringUtils.isEmpty(this.apiKey))
+        {
+            this.apiKey = "test";
+        }
     }
 
     public Project buildProject()
