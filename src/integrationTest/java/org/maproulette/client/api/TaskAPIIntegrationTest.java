@@ -108,9 +108,9 @@ public class TaskAPIIntegrationTest extends IntegrationBase
     @Test
     public void updateTest() throws MapRouletteException
     {
-        final var toCreate = this.getDefaultTaskForNewConfiguration(TASK_NAME);
+        final var toCreate = this.getDefaultTask(TASK_NAME);
         final var createdIdentifier = this.getTaskAPI().create(toCreate).getId();
-        final var created = this.getTaskAPIForNewConfiguration().get(createdIdentifier);
+        final var created = this.getTaskAPI().get(createdIdentifier);
         Assertions.assertTrue(created.isPresent());
         this.compare(toCreate, created.get());
 
@@ -128,8 +128,8 @@ public class TaskAPIIntegrationTest extends IntegrationBase
         final var res = mapper.createObjectNode().set(TASK_FEATURES, arrayNode);
         update.setGeometries(res);
 
-        final var updatedTask = this.getTaskAPIForNewConfiguration().update(update);
-        final var retrievedUpdatedTask = this.getTaskAPIForNewConfiguration()
+        final var updatedTask = this.getTaskAPI().update(update);
+        final var retrievedUpdatedTask = this.getTaskAPI()
                 .get(updatedTask.getId());
         Assertions.assertTrue(retrievedUpdatedTask.isPresent());
         this.compare(updatedTask, retrievedUpdatedTask.get());
