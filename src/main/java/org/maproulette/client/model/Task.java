@@ -10,8 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.exception.MapRouletteRuntimeException;
 import org.maproulette.client.utilities.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -56,7 +54,6 @@ public class Task implements IMapRouletteObject, Serializable
         private final ObjectMapper mapper = new ObjectMapper();
         private final Set<PointInformation> points = new HashSet<>();
         private ArrayNode geoJson = this.mapper.createArrayNode();
-        private static final Logger logger = LoggerFactory.getLogger(TaskBuilder.class);
 
         public TaskBuilder locationGeojson(final String geojson)
         {
@@ -103,40 +100,24 @@ public class Task implements IMapRouletteObject, Serializable
             return this;
         }
 
-        public TaskBuilder addGeojson(final List<String> geojsonList)
+        public TaskBuilder addGeojson(final List<String> geojson)
         {
-            geojsonList.forEach(jsonString ->
-            {
-                try
-                {
-                    this.geoJson.add(this.mapper.readTree(jsonString));
-                }
-                catch (final IOException ioException)
-                {
-                    logger.error(
-                            "Exception occurred while parsing json (invalid JSON) in addGeoJson",
-                            ioException);
-                }
-            });
+            geojson.forEach(this.geoJson::add);
             return this;
         }
 
         public Task build()
         {
-            if (this.geoJson.size() > 0)
+            try
             {
-                this.geoJson.forEach(node ->
+                if (this.geometries == null)
                 {
-                    try
-                    {
-                        this.geometries(this.buildGeometries());
-                    }
-                    catch (final MapRouletteException maprouletteException)
-                    {
-                        logger.error("Exception occurred while building geometries",
-                                maprouletteException);
-                    }
-                });
+                    this.geometries(this.buildGeometries());
+                }
+            }
+            catch (final MapRouletteException e)
+            {
+                throw new MapRouletteRuntimeException(e);
             }
             // make sure that the default is set correctly
             if (this.id < 1)
@@ -205,11 +186,6 @@ public class Task implements IMapRouletteObject, Serializable
             final var result = this.mapper.createObjectNode();
             result.set(TASK_FEATURES, generateTaskFeatures(this.points, this.geoJson));
             return result;
-        }
-
-        public JsonNode getGeometries()
-        {
-            return this.geometries;
         }
     }
 

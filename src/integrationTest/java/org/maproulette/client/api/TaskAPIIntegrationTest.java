@@ -1,8 +1,5 @@
 package org.maproulette.client.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +12,9 @@ import org.maproulette.client.model.ChallengePriority;
 import org.maproulette.client.model.Task;
 import org.maproulette.client.model.TaskStatus;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 /**
  * @author mcuthbert
  */
@@ -23,9 +23,13 @@ public class TaskAPIIntegrationTest extends IntegrationBase
     private Challenge createdChallenge = null;
     private Challenge createdChallengeForNewConfiguration = null;
     public static final String DEFAULT_GEOMETRY = "TestGeometry";
+    public static final String UPDATED_GEOMETRY = "UpdateGeometry";
     public static final String TEST_INSTRUCTION = "TestInstruction";
+    public static final String UPDATED_INSTRUCTION = "UpdatedInstruction";
     public static final String TASK_NAME = "TestTask";
+    public static final String UPDATED_TASK_NAME = "UpdateTaskName";
     public static final String CHALLENGE_NAME = "TestChallenge";
+    public static final String TASK_FEATURES = "features";
 
     @BeforeEach
     public void setup() throws MapRouletteException
@@ -85,28 +89,48 @@ public class TaskAPIIntegrationTest extends IntegrationBase
         final var created = this.getTaskAPIForNewConfiguration().get(createdIdentifier);
         Assertions.assertTrue(created.isPresent());
         Assertions.assertNotNull(created.get().getGeometries());
-        final var resetGeometry = created.get().toBuilder().resetGeometry();
-        Assertions.assertNull(resetGeometry.getGeometries());
+        final var update = created.get().toBuilder().instruction(UPDATED_INSTRUCTION)
+                .status(TaskStatus.FIXED).name(UPDATED_TASK_NAME).resetGeometry()
+                .addGeojson(String.format(TestConstants.FEATURE_STRING, 3.1, 4.2, UPDATED_GEOMETRY))
+                .build();
+        Assertions.assertNotNull(update);
+
+        final var updatedTask = this.getTaskAPIForNewConfiguration().update(update);
+        final var retrievedUpdatedTask = this.getTaskAPIForNewConfiguration()
+                .get(updatedTask.getId());
+        Assertions.assertTrue(retrievedUpdatedTask.isPresent());
+
+        Assertions.assertEquals("{\"features\":["
+                + String.format(TestConstants.FEATURE_STRING, 3.1, 4.2, UPDATED_GEOMETRY) + "]}",
+                retrievedUpdatedTask.get().getGeometries().toString());
     }
 
     @Test
     public void updateTest() throws MapRouletteException
     {
-        final var toCreate = this.getDefaultTask(TASK_NAME);
+        final var toCreate = this.getDefaultTaskForNewConfiguration(TASK_NAME);
         final var createdIdentifier = this.getTaskAPI().create(toCreate).getId();
-        final var created = this.getTaskAPI().get(createdIdentifier);
+        final var created = this.getTaskAPIForNewConfiguration().get(createdIdentifier);
         Assertions.assertTrue(created.isPresent());
         this.compare(toCreate, created.get());
 
-        final Task.TaskBuilder taskBuilder = created.get().toBuilder();
-        final List<String> geoJsons = new ArrayList<>();
-        Assertions.assertNotNull(taskBuilder.getGeometries().get("features").get(0));
-        geoJsons.add(taskBuilder.getGeometries().get("features").get(0).toString());
-        geoJsons.add(String.format(TestConstants.FEATURE_STRING, 3.1, 4.2, "UpdateGeometry"));
-        final var update = taskBuilder.instruction("UpdatedInstruction").status(TaskStatus.FIXED)
-                .name("UpdateTaskName").addGeojson(geoJsons).build();
-        final var updatedTask = this.getTaskAPI().update(update);
-        final var retrievedUpdatedTask = this.getTaskAPI().get(updatedTask.getId());
+        final var update = created.get().toBuilder().instruction(UPDATED_INSTRUCTION)
+                .status(TaskStatus.FIXED).name(UPDATED_TASK_NAME).resetGeometry()
+                .addGeojson(String.format(TestConstants.FEATURE_STRING, 3.1, 4.2, UPDATED_GEOMETRY))
+                .build();
+
+        final ObjectMapper mapper = new ObjectMapper();
+        final ArrayNode arrayNode = mapper.createArrayNode();
+        Assertions.assertNotNull(created.get().getGeometries().get(TASK_FEATURES).get(0));
+        Assertions.assertNotNull(update.getGeometries().get(TASK_FEATURES).get(0));
+        arrayNode.add(created.get().getGeometries().get(TASK_FEATURES).get(0));
+        arrayNode.add(update.getGeometries().get(TASK_FEATURES).get(0));
+        final var res = mapper.createObjectNode().set(TASK_FEATURES, arrayNode);
+        update.setGeometries(res);
+
+        final var updatedTask = this.getTaskAPIForNewConfiguration().update(update);
+        final var retrievedUpdatedTask = this.getTaskAPIForNewConfiguration()
+                .get(updatedTask.getId());
         Assertions.assertTrue(retrievedUpdatedTask.isPresent());
         this.compare(updatedTask, retrievedUpdatedTask.get());
         Assertions
@@ -116,7 +140,7 @@ public class TaskAPIIntegrationTest extends IntegrationBase
                                         TestConstants.FEATURE_STRING, 1.1, 2.2, DEFAULT_GEOMETRY)
                                 + ","
                                 + String.format(TestConstants.FEATURE_STRING, 3.1, 4.2,
-                                        "UpdateGeometry")
+                                        UPDATED_GEOMETRY)
                                 + "]}",
                         retrievedUpdatedTask.get().getGeometries().toString());
     }

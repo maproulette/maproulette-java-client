@@ -144,7 +144,7 @@ public class IntegrationBase
 
     public Project buildProject()
     {
-        return Project.builder().name("Project name test").description("Project Description ")
+        return Project.builder().name("Test project name").description("Project Description ")
                 .displayName("Project Display name").enabled(true).build();
     }
 
