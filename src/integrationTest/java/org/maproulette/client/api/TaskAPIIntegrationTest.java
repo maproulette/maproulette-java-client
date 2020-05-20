@@ -129,8 +129,7 @@ public class TaskAPIIntegrationTest extends IntegrationBase
         update.setGeometries(res);
 
         final var updatedTask = this.getTaskAPI().update(update);
-        final var retrievedUpdatedTask = this.getTaskAPI()
-                .get(updatedTask.getId());
+        final var retrievedUpdatedTask = this.getTaskAPI().get(updatedTask.getId());
         Assertions.assertTrue(retrievedUpdatedTask.isPresent());
         this.compare(updatedTask, retrievedUpdatedTask.get());
         Assertions
