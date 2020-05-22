@@ -1,0 +1,29 @@
+env:
+  global:
+    # SONATYPE USERNAME
+    - secure: "S1ng+9HDtuwDo6xweJJ++Y1Bjh3iN9KzjRsMDH5abOGJuO6CDXHQ/afVImX04xyuQ8EQXfW4FyfnW/GRw9dWAOff7wW+IsJmSasTADrgp+SXjZw19gWyB/QPsLfO+4lVK1DZPd1p7cUfhhRyo8N/cLMHbFTbGcdf1E6jyOiRbdvrlMgBkxuQSoCwNHex8pEeB0uh5H5kYk2wVWoSsNVdZ7pQ1w5lPsQP12rtSAUl+rk4Aq+Qt1e0ukJtbWYR+doD+UP7/s2td+qbFWpLHwFJd+AR0UZ7GpsZA/XttwAnbrEfq7z+8timsZmR+WfCatuwIv+r3lEeGhTmRNmdgJLPH0AxC9QxHFGvFLQU3JXt3UNKZ4wJkbaqWI44hAd/UC3IU8p/Hu7F09U3nezG/5ztL2oUEeZNjl4v8BjpnZU8kebuOxTQKM9+XBAH9Jn14be+S1pj2j/oKOnCbG4ahBUBjGl0H0iKOHHhWK+tzunVNeTcETzNym4C2Gk/M1LzPb0YH4TUtIVutn9/O59G+EWtt9otlztQlUDiPWZPXV/Ravjmxh4Zu69m72CADuIsaDcoy06LwwbA91pneSt56ZrJGRiy4S5LxBcbYrHa3ZdME/qF0GYT+Iy/mBV8ia6WEH0cJbgVhpM8pvIrPYOKhvLJ/3spKKGMxU1FbiT/zjBYCOA="
+    # SONATYPE PASSWORD
+    - secure: "vykAvlD177KEnw1lJ/8y+8M2QgzFX6PjSQ1ovutriLcEpOXADf0gUPKM+1VlKfZgb9GjttnVLX9dNMm44hd/n0LBe1aE0cfe9jar7cC0WXmZ1MBi6+sSNOHB7/AGQCJUY4lMYEBDnFu1RFT4tczu7wux7HobaMQT9nCVXJ8usXGsEU6ll2agCyIhR1MwvLiIYOLUdFMA5VoKdpuKu5LAzgRo9QuDWvpatIHCkVRJ+9kKnhAQNWHbLQPnneI6vN1qQe6eXt7erROBwsOeSq5B5OhUdBuvOyRITXq2Ayp063lSTdGsiPzusXClfboi7JWUahFsEuUOamXqPRuKAUu2b1Tuup4O5zMEnpTgoT6Uf5wLZTkjR3E2RWbfHtuHC3xEBYltcftLt/PQI3RXIJiMtvNOwFzNgq/s4YvbQZOS+uJhii+4VLoC8q/AUnnqYvRp0lCJHzGsAjnS/ZkdMpGRcZKuTJpOHh0SRijV/EoBhf1GvB1+UXnS+VxmrnB95DLEmsdBLjun1o24LJ5k09ju07lAp5kmG5ZvzzNZpjK9d7pn+d/7pfwcj/nZiQ4+krzO7FIhOvF3gsVOazV6wo6P2RODScYdkz0zm7y5Icu7AMU48nb95ZOi5/lYQRv/rWevTTTG5DTwyHleYXc95h5y1cWb6DBxOzdUZTWys54NjZI="
+    # GPG_KEY_ID
+    - secure: "jT45AgKTg0jAvqs1hkSMSXH49eoTGt9nv0Nbimt0IlZoSEiZxxu5j22nwxje/6oEU0Jaz8Tag0vsiRaf3wigv74K/IjxV3X/BWBYbvv4J83qcnQML92D7L2RS5Qo8ekrwg1gYauWTWEMt0n8SA9BksQ3I3pM0A11VkPG1m3VYDt2hxTv6LM3UfVEsgEiSQg0JbXJqnytX94OKQH8gy4TZ4ZX/isNNGjMx8N1tNTlXDxHVgciIFFnKOwI78kqehuZQbsOXiyla6owfM2qR7yvY9BIZseaadZCpdTlzWwjWuELZe+QV23XkxUoMrdsdH84G9btA043osRMMp35SUU87uubvlpCW/d92ItcmwanH8aJmZ9AfP1YScXLz92TBDJAeXLQ0xxPeUDkpYTfX5gMvak1LcVpPB6sc0zucqxT6CCamEx7xQQJlrEjw3GvCYk9vp/KXs0epNLQ75p3oZBBX3M0z+YOaTKZ1GFfYH7Qea7yx1Nz13CLGOXDGgouaehcdlxl1dAmQk89oLfQeu34KYh/DZPzrn/w0GTKprdDFoZKTnFJEA4lYz3z4IAFbQb3g16ISTGF6iuZgorDYMwpgOFdAMM2eL0Ic/uzAHL3IeTWjsak/sfIjbELm8rsulf6VyAJ+NdWS22vjoSbV0WdUlqK7ytMdWLY3H0x3Qzbo1M="
+    # GPG_PASSPHRASE
+    - secure: "p1Vp29sdG8QN8iwM+TbT4bRhGaQcSFZQmXNiBxPqGzmJ2lNnHhEdKyw6DBkF0VDmuOnobEXrk3Ad8rrR52QOBzzwypc9XgBIPXlZVMsA3EDA5NoRScwUnrP4KoSSAPAtTdpZa8H340SLHXHAxCCb0WvrX+nBGBeTr3DQ0IpK7AHhHMSlltGa+R44qyyN8Fh+QX5xn8fFUi+G/5gXE2GaxgSEO9TQ1YOnUIYAATdAhJuAvhVPnK1pa3jO26MP380c6LzH+fzVvlJ9qdxsaLCZ4qLTDk4yb+G0CHx9VpSdkokJnMq+STnrDzSuhs9nEGNKnSVLXMuuBDCjfcumWWiEvaoJJrSVFcgOpmP9bkdP1b4RCdoeWB6cvIfPJNotnsh91fnMSvWmhmQdjr+VsJe/lrLsRsDqwUTDkuiTbIDYG9ZgA8CC0+QA3GHlLdtgBkI8l0tz8deKf7DXbSBunCcb+SFMXtHf9ch3+SX3Jj25wZYH5bUO5rAZcBM+KRyde9qWut3DGV+N71SkjwE8nLGzj5Iz6/blrKBqjP/PqEjQ/NM7noBjHyfrOa13UzOkfYD0IjCwp90fhtkmzR/GMv1XRY0yWEf2IfyjEm9I+cIXZYia0TQy4PoOz6h48s0SHeBVFgckBLK+/CdMTLRQKOCgQm0n8t8z5UBDaQYGA8lhtkE="
+    - GPG_KEY_LOCATION=".travis/secring.gpg"
+    - ENCRYPTED_GPG_KEY_LOCATION=".travis/secring.gpg.enc"
+branches:
+  only:
+    - master
+    - dev
+language: java
+dist: xenial
+jdk:
+  - openjdk11
+before_install:
+  - chmod -R ug+x .travis
+  - ".travis/install.sh"
+script:
+  - chmod -R ug+x .travis
+  - ".travis/build.sh"
+  - ".travis/merge-dev-to-master-gate.sh"
+  - ".travis/deploy-gate.sh"
+  - ".travis/tag-master-gate.sh"
