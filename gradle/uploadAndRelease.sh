@@ -19,7 +19,7 @@ function runWithRetry()
 	done
 }
 
-export MR_CLIENT_PROFILE_ID=1442a4f451744
+export MR_CLIENT_PROFILE_ID=102f5c5214c20
 export DESCRIPTION_PAYLOAD="<promoteRequest>\
     <data>\
         <description>MapRoulette Java Client Release</description>\
