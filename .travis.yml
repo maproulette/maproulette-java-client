@@ -1,0 +1,32 @@
+env:
+  global:
+    - # GITHUB_SECRET_TOKEN
+    - secure: "R88mt4EPhDWKlAVQMSAGf2bTbePXwEmEphBteuuU1iH1gBkTv/uUfI6UbQfgGERJFGbGOvAweq1JELHZ85WwkVmtrSWBZXM0RXcG7/SJ/6qEreQoTYm+PkXpCFHD6fHSRZ7Sn70h9r//Juz4mDAXDqTRtfuw5MLYH1nsrQDr0KnPh+gJp7K1uW96wuAsX/pI/Z0E01cEsbjLcozeMb2G5rs0mYqEM7+S9G3bcPMJL2frqQ0q3/SaxEtZIhrG8ZLEWzfFaWxc0kAXdppWXxMg0Ezq/FdiNU9N0pyqPknBRGFy4xoF8tv9NZh8Axt/oOxblCqc24O9GpR835SZwZzZUa+T7jWg64k2nirwmB4AOxh9KqKS7dxx1lvlkWkUk0Ex0Fb9HmgmxaShTZ8weQ5u+FXv9iRxdVmoAaiW12Mhx5u3eGvuixXzfX1cMCtvNlITGgRVsOjqJwhrV4e5M/5LJr3vPocmJsZCnCwHwP0CsLTFUHFjgyY9yVv72UaYAkTFS2XmI5Um95tLslhD8vRJVyIpRt55o5578YlQY1p+ztEp9S1DM7/EJIaP68EyOEmK9qA4X4qKRa2BY6fpklGL8QuAKlAn5LJ549T++UuJ9sd+mKo8Pm03Q70vboPP/yZi9dtyGrQxZDsHotxxOy3FuYxkmJaMuU+bjDSUvx2uxnE="
+    - # SONATYPE_USERNAME
+    - secure: "cc3DIktkL6zIcd5ESp5zfhiD7v7rsTCew8BpjZwZiws6s9KBe1kHS3oRf9FWdcKWajXw6iCH9gHmRaQVWsqnpjA6xuUTFBYzPVsewzJSde1+Q8wL5jzWxAwAG8EV2e7m9ZDlr1gXKTHjMmq/PdoTCzHO8w1FrpRpefLIQxB3wjd2NoAkG2cp51eU7tVHvPWUxsuSSn57VWVyY2jZRf0MRqtaVwGFJlUKqj/oGqcDI6Wb6GButDHeSOJ8ZDTyAxqslBq7RLzJys5NxD0uO/pAjkDYOBk32Dt9oHQn3+fZD/2M+5Pi3U7uh9dGwlc4k4iNc3cOMgPiIap97HBGo2xgd5LmsUr0nSu8HogCUjfWnVjwV5anILxYX1rIyzSQ3EHROxpIxD6n/O+lbggMPCrkuMl6+pkE1SfvwYq1DfBL8681I2DpE6ptqYovtv5ZHuJcWgeqeBsAqC1hT61iU0XsfW2I7md4U2C9ZjKSe5aIi9OeUlgCPCZ+ZGWaVgwSsLpVvlQ/6UTFEykjj/dbfepRNm3PqBkESehEl6YA3F2pAZdJH2yowV2YMruwLwh3oZt4cAnqImIMvEd2k5s0VAk25zjhPFjzVvmVo/skXoW2GZ5Jrc1ACkYzky68azthGhrNfENtTFyAr4b30jMzASF3xI1aCeIGEmNDPkzjjxBg0Y4="
+    - # SONATYPE_PASSWORD
+    - secure: "JCdzz/2SUhObQgnb3uCtF1BiZ9SFQ9zcCADtPoRgvEOQ+RmIJZ1NBzwASlblqmuGbciVxL5VewBi9HkBBb4ND5A9KQktqO8nHxE27w9r6ftdOAkBhpJFykt5cD2lwah9I35C9LKlHljet8PgARUQNP4fWzMET/NOyO/CTZtyzzI7AyEWMfkoGLnlNFi3Isjt5H4Iwn37cHaUsmcUhFomQ5iBX7KJs7u+dH6bCupkq/4qEhlPOUJV8HIdH1Ro/NkoEb0vtoOSqQi7aLRtKMFZVPYk6VHXS+McuMp6MFr90Gtz6wEde8C1oRUD3bl9+gh/5L27lNDLEOwphL9CPceuFkSEhWFJE3BUx9KjAVhnR+wwZP9WhTcjfI7d9tze6e6yartfgvHq+qqKRuhXSCHtY/fS2n2aA1KnQVUeqQ+6MHIgAe8Hd1UYUsulNtjyLu51I5nMmOHo1Ey8QS4EDtfph7NV29vbfm/N4HZK3PQ5Q704zZgBqqmM7u3UzOHDTbX0byNayA1NDV/5RmUxttNx2h0TxcxaWR2dP0+IQfD83zq40Qni30JqDb3kCmYnuH18TJcls3OV9CAP7Q/gj4TC14ODfUyU0o7351kd2wppeAiBT2FKmmV1EFpGDtE/RS5W3xnyRliG3ZVHT+VPKjf1PLTj+k32ICHSs4PSc88Xw2c="
+    - # GPG_KEY_ID
+    - secure: "YdhcdxE7qzsnxWCzCkL+vliVaDHtY/N5k/GFrSavW4+F5Ua6nyKlYtj3WPkbdfuKxDcCLJ8/CwM24HYeRMx/MaGbjuQYnW5ML/gwbc2L/7fno4NTUwxpR+Y/QurJSpbTfVRv70emRlRolnjXd5i8Nyjp5bj7Kor6Zhg+eJnrgHP3Olp3fTB0JkyfV4K2m9DB/6pdydHbEs/iEo5O5O/4ZbkBIXITu4qFePJBYtYppHytJHdt2MEBQBFwY+1IAQsNDPTQj2Xk4mgzQDdAfnRE+vgGzVDj0wLLDayB5FlFldxOns0rbupL66c9UQjCiwG4wFzu6vllLKO8obE9rk5uK2E6OCD6A13Iej6r5SkSxKmE8Ma20KhbcWfAnbW/nMTWyPGf1svHZwUkzCWD9r3hmqOmVfKM3SaUNCWqs3nbwdh8MuC1/JBeR87xJ+bww7Rov7H0ba0V+KZiTZWOj2qlB890/swgEkhGaN4q10TNIrFpal4CybeKcje4QwIJaZMPT8XxQ/elwxvarqEXaOXY7DGUr9C03asrgc7TM3OrKMNXAsv0vZdCpSaz8Kn+C4EcplSFyRtjd2HA/yto8kYqAfpGz216Kq6KxK6tfEw5Y9LwcYjTlPeDS7ceCrQFJjTsGtahFJIFxxWH8ur75iR76RaVwuWpJ0ZiByN4Dw+vkFM="
+    - # GPG_PASSPHRASE
+    - secure: "kylMAn0IAmKedkpExH8Ab30NLjq+kTG8i1C/oKFsWBDPK+IEKoO0ETRz94vvVRFpFMEB+CZsO0+DbL5icJyuC+82wb9jsdGNEkev7BJ2XFCmMzodcEVIer+v5PYXAiT1rqwGR/6kPy790PQq3jNdDwinnaNk/Wva/jRa9y9QyQc2gvf5J3ZDbZzqiHCyBFdHVhEMVyioYRT1OLVvSqrh4QGy04bkYpdNEWgCZMSmfier41Y+N0Fl05AAHwzX/AT9bRISfWsAyYeruUGks+mdbRN1S/bHEtq6KP/6bFfoGHgY8Iu2febU70uF+AOpNADymdz6bH5y7F0J+k1p2eTQsh95c/r1SFeEay9ScIGiCQnp1eVoB75PDbyQ8gdvUUVU+5NcG7ROAZXuiPfonMEaaocSF1h7yKD4Vdrm4Ef5FKnf/2IvT9/yuXrDFGFEvITe9IS++Pif317k331Ewi2tesChzmB45611a1+KMwpbND3InZxHK45NtAfa/xDg9NyszJtHMEaQWnGdmbR9puVMxBkn3PbzHszDWhBlpuMDev058iqXt40WwKIjZgckGYsTWGB9UDt1o8NGYRBmNvvAcCHxLhlRrFV9Enr3KCPGi9QX9s/yvHv2vOKbWd0MBG4IrlY7NOqabsOVgPUalHz3L6xGnjpq3HnR21E+JchUEF8="
+    - GPG_KEY_LOCATION=".travis/secring.gpg"
+    - ENCRYPTED_GPG_KEY_LOCATION=".travis/secring.gpg.enc"
+branches:
+  only:
+    - master
+    - dev
+language: java
+dist: xenial
+jdk:
+  - openjdk11
+before_install:
+  - chmod -R ug+x .travis
+  - ".travis/install.sh"
+script:
+  - chmod -R ug+x .travis
+  - chmod -R ug+x gradle
+  - ".travis/build.sh"
+  - ".travis/merge-dev-to-master-gate.sh"
+  - ".travis/deploy-gate.sh"
+  - ".travis/tag-master-gate.sh"
