@@ -25,6 +25,7 @@ before_install:
   - ".travis/install.sh"
 script:
   - chmod -R ug+x .travis
+  - chmod -R ug+x gradle
   - ".travis/build.sh"
   - ".travis/merge-dev-to-master-gate.sh"
   - ".travis/deploy-gate.sh"
