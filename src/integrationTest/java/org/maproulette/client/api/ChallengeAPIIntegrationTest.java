@@ -36,6 +36,15 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
     }
 
     @Test
+    public void basicAPINewConfigurationTest() throws MapRouletteException
+    {
+        final var toCreate = this.getBasicChallengeForNewConfiguration();
+        final var createdChallengeIdentifier = this.getChallengeAPIForNewConfiguration()
+                .create(toCreate).getId();
+        Assertions.assertNotEquals(-1, createdChallengeIdentifier);
+    }
+
+    @Test
     public void basicAPITest() throws MapRouletteException
     {
         final var toCreate = this.getBasicChallenge();
@@ -190,6 +199,14 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
         return Challenge.builder().parent(1234).name("challengeTest").instruction("TestInstruction")
                 .description("Testing challenge creation").blurb("Testing challenge creation blurb")
                 .difficulty(ChallengeDifficulty.EXPERT).parent(this.getDefaultProjectIdentifier())
+                .build();
+    }
+
+    private Challenge getBasicChallengeForNewConfiguration()
+    {
+        return Challenge.builder().parent(1234).name("challengeTest").instruction("TestInstruction")
+                .description("Testing challenge creation").blurb("Testing challenge creation blurb")
+                .difficulty(ChallengeDifficulty.EXPERT).parent(this.getNewProjectIdentifier())
                 .build();
     }
 }

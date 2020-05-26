@@ -85,6 +85,11 @@ public class MapRouletteConfiguration implements Serializable
         this(HttpHost.DEFAULT_SCHEME_NAME + "s", server, port, projectName, apiKey);
     }
 
+    public MapRouletteConfiguration(final String server, final int port, final String apiKey)
+    {
+        this(HttpHost.DEFAULT_SCHEME_NAME + "s", server, port, apiKey);
+    }
+
     public MapRouletteConfiguration(final String scheme, final String server, final int port,
             final String projectName, final String apiKey)
     {
@@ -92,6 +97,17 @@ public class MapRouletteConfiguration implements Serializable
         this.server = server;
         this.port = port;
         this.defaultProjectName = projectName;
+        this.apiKey = apiKey;
+        this.batchSize = DEFAULT_BATCH_SIZE;
+    }
+
+    public MapRouletteConfiguration(final String scheme, final String server, final int port,
+            final String apiKey)
+    {
+        this.scheme = scheme;
+        this.server = server;
+        this.port = port;
+        this.defaultProjectName = "";
         this.apiKey = apiKey;
         this.batchSize = DEFAULT_BATCH_SIZE;
     }

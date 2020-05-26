@@ -13,7 +13,7 @@ import org.maproulette.client.model.Project;
  */
 public class IntegrationBase
 {
-    public static final String DEFAULT_PROJECT_NAME = "IntegrationTestProject";
+    public static final String DEFAULT_PROJECT_NAME = "IntegrationTestProject1";
     public static final String ENVIRONMENT_HOST = "host";
     public static final String ENVIRONMENT_PORT = "port";
     public static final String ENVIRONMENT_API_KEY = "apiKey";
@@ -25,10 +25,19 @@ public class IntegrationBase
             .description("Project Description").displayName("Project Displayname").enabled(true)
             .build();
     private long defaultProjectIdentifier = -1;
+    private long projectIdentifier = -1;
+    private String host;
+    private int port;
+    private String apiKey;
 
     public long getDefaultProjectIdentifier()
     {
         return this.defaultProjectIdentifier;
+    }
+
+    public long getNewProjectIdentifier()
+    {
+        return this.projectIdentifier;
     }
 
     public Project getDefaultProject()
@@ -45,6 +54,15 @@ public class IntegrationBase
         return this.taskAPI;
     }
 
+    public TaskAPI getTaskAPIForNewConfiguration()
+    {
+        if (this.taskAPI == null)
+        {
+            this.taskAPI = new TaskAPI(this.getConfigurationExcludingProject());
+        }
+        return this.taskAPI;
+    }
+
     public ChallengeAPI getChallengeAPI()
     {
         if (this.challengeAPI == null)
@@ -52,6 +70,25 @@ public class IntegrationBase
             this.challengeAPI = new ChallengeAPI(this.getConfiguration());
         }
         return this.challengeAPI;
+    }
+
+    public ChallengeAPI getChallengeAPIForNewConfiguration()
+    {
+        if (this.challengeAPI == null)
+        {
+            this.challengeAPI = new ChallengeAPI(this.getConfigurationExcludingProject());
+        }
+        return this.challengeAPI;
+    }
+
+    public MapRouletteConfiguration getConfigurationExcludingProject()
+    {
+        if (this.configuration == null)
+        {
+            this.configurationParamsSetUp();
+            this.configuration = new MapRouletteConfiguration(this.host, this.port, this.apiKey);
+        }
+        return this.configuration;
     }
 
     public ProjectAPI getProjectAPI()
@@ -63,39 +100,60 @@ public class IntegrationBase
         return this.projectAPI;
     }
 
+    public ProjectAPI getProjectAPIForNewConfiguration()
+    {
+        if (this.projectAPI == null)
+        {
+            this.projectAPI = new ProjectAPI(this.getConfigurationExcludingProject());
+        }
+        return this.projectAPI;
+    }
+
     public MapRouletteConfiguration getConfiguration()
     {
         if (this.configuration == null)
         {
-            var host = System.getenv(ENVIRONMENT_HOST);
-            if (StringUtils.isEmpty(host))
-            {
-                host = "localhost";
-            }
-            int port;
-            try
-            {
-                port = Integer.parseInt(System.getenv(ENVIRONMENT_PORT));
-            }
-            catch (final NumberFormatException e)
-            {
-                port = 9000;
-            }
-            var apiKey = System.getenv(ENVIRONMENT_API_KEY);
-            if (StringUtils.isEmpty(apiKey))
-            {
-                apiKey = "test";
-            }
-            this.configuration = new MapRouletteConfiguration(host, port, DEFAULT_PROJECT_NAME,
-                    apiKey);
+            this.configurationParamsSetUp();
+            this.configuration = new MapRouletteConfiguration(this.host, this.port,
+                    DEFAULT_PROJECT_NAME, this.apiKey);
         }
         return this.configuration;
+    }
+
+    private void configurationParamsSetUp()
+    {
+        this.host = System.getenv(ENVIRONMENT_HOST);
+        if (StringUtils.isEmpty(this.host))
+        {
+            this.host = "localhost";
+        }
+        try
+        {
+            this.port = Integer.parseInt(System.getenv(ENVIRONMENT_PORT));
+        }
+        catch (final NumberFormatException e)
+        {
+            this.port = 9000;
+        }
+        this.apiKey = System.getenv(ENVIRONMENT_API_KEY);
+        if (StringUtils.isEmpty(this.apiKey))
+        {
+            this.apiKey = "test";
+        }
+    }
+
+    public Project buildProject()
+    {
+        return Project.builder().name("Test project name").description("Project Description ")
+                .displayName("Project Display name").enabled(true).build();
     }
 
     public void setup() throws MapRouletteException
     {
         // build the project that will be used to execute the integration tests for the challenges
-        this.defaultProjectIdentifier = this.projectAPI.create(this.defaultProject).getId();
+        this.defaultProjectIdentifier = this.getProjectAPI().create(this.defaultProject).getId();
+        this.projectIdentifier = this.getProjectAPIForNewConfiguration().create(this.buildProject())
+                .getId();
     }
 
     public void teardown() throws MapRouletteException
@@ -103,7 +161,11 @@ public class IntegrationBase
         // remove the project that is used to execute the integration tests for the challenges
         if (this.defaultProjectIdentifier != -1)
         {
-            this.projectAPI.forceDelete(this.defaultProjectIdentifier);
+            this.getProjectAPI().forceDelete(this.defaultProjectIdentifier);
+        }
+        if (this.getNewProjectIdentifier() != -1)
+        {
+            this.getProjectAPIForNewConfiguration().forceDelete(this.getNewProjectIdentifier());
         }
     }
 }
