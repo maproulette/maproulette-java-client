@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 GITHUB_REPO="osmlab/maproulette-java-client"
-RELEASE_BRANCH=master
+RELEASE_BRANCH=main
 
 FUNCTION_NAME="tag-$RELEASE_BRANCH"
 
