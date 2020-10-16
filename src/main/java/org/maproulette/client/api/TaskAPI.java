@@ -12,6 +12,8 @@ import org.maproulette.client.connection.MapRouletteConnection;
 import org.maproulette.client.connection.Query;
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +30,7 @@ public class TaskAPI implements IAPI<Task>
 {
     private final ObjectMapper mapper = new ObjectMapper();
     private final IMapRouletteConnection connection;
+    private static final Logger logger = LoggerFactory.getLogger(TaskAPI.class);
 
     public TaskAPI(final MapRouletteConfiguration configuration)
     {
@@ -80,6 +83,10 @@ public class TaskAPI implements IAPI<Task>
         {
             final var query = Query.builder().post(QueryConstants.URI_TASK_POST)
                     .data(this.mapper.writeValueAsString(task)).build();
+            logger.info("checking the response {}",
+                    this.parseResponse(this.connection.execute(query).orElse(""))
+                            .orElseThrow(() -> new MapRouletteException(
+                                    "Invalid response provided by update query.")));
             return this.parseResponse(this.connection.execute(query).orElse("")).orElseThrow(
                     () -> new MapRouletteException("Invalid response provided by update query."));
         }
