@@ -81,9 +81,8 @@ public class TaskAPI implements IAPI<Task>
             final var query = Query.builder().post(QueryConstants.URI_TASK_POST)
                     .data(this.mapper.writeValueAsString(task)).build();
 
-            return this.parseResponse(this.connection.execute(query).orElse(""))
-                    .orElseThrow(() -> new MapRouletteException(
-                            "Invalid response provided by update query."));
+            return this.parseResponse(this.connection.execute(query).orElse("")).orElseThrow(
+                    () -> new MapRouletteException("Invalid response provided by update query."));
         }
         catch (final JsonProcessingException e)
         {
