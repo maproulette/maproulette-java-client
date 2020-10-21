@@ -1,5 +1,8 @@
 package org.maproulette.client.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.maproulette.client.TestConstants;
@@ -33,13 +36,16 @@ public class TaskTest
     @Test
     public void toBuilderTest()
     {
+        final List<String> testTags = Arrays.asList("fixtype=testing", "usecase=1");
         final var task = Task.builder(1234, "Task1")
-                .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.2, 4.5, "TestG")).build();
+                .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.2, 4.5, "TestG"))
+                .tags(testTags).build();
         final var updatedGeo = String.format(TestConstants.FEATURE_STRING, 5.6, 7.8, "TestG2");
         final var updateTask = task.toBuilder(true).name("UTask1").addGeojson(updatedGeo).build();
         Assertions.assertEquals("UTask1", updateTask.getName());
         Assertions.assertEquals("{\"features\":[" + updatedGeo + "]}",
                 updateTask.getGeometries().toString());
+        Assertions.assertEquals(testTags, updateTask.getTags());
     }
 
     @Test

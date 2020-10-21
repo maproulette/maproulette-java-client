@@ -129,7 +129,7 @@ public class Task implements IMapRouletteObject, Serializable
                 this.parent(-1);
             }
             return new Task(this.id, this.parent, this.name, this.instruction, this.location,
-                    this.status, this.priority, this.geometries);
+                    this.status, this.priority, this.geometries, this.tags);
         }
 
         protected ArrayNode generateTaskFeatures(final Set<PointInformation> source,
@@ -200,6 +200,7 @@ public class Task implements IMapRouletteObject, Serializable
     private TaskStatus status;
     private ChallengePriority priority;
     private JsonNode geometries;
+    private List<String> tags;
 
     public static TaskBuilder builder(final long parentIdentifier, final String name)
     {
