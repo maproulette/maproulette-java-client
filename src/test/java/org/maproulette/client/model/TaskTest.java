@@ -36,16 +36,16 @@ public class TaskTest
     @Test
     public void toBuilderTest()
     {
-        final List<String> test_tags = Arrays.asList("fixtype=testing", "usecase=1");
+        final List<String> testTags = Arrays.asList("fixtype=testing", "usecase=1");
         final var task = Task.builder(1234, "Task1")
                 .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.2, 4.5, "TestG"))
-                .tags(test_tags).build();
+                .tags(testTags).build();
         final var updatedGeo = String.format(TestConstants.FEATURE_STRING, 5.6, 7.8, "TestG2");
         final var updateTask = task.toBuilder(true).name("UTask1").addGeojson(updatedGeo).build();
         Assertions.assertEquals("UTask1", updateTask.getName());
         Assertions.assertEquals("{\"features\":[" + updatedGeo + "]}",
                 updateTask.getGeometries().toString());
-        Assertions.assertEquals(test_tags, updateTask.getTags());
+        Assertions.assertEquals(testTags, updateTask.getTags());
     }
 
     @Test
