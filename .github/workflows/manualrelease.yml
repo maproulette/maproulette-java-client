@@ -1,0 +1,16 @@
+name: Release
+on:
+  workflow_dispatch:
+    branches: [ main ]
+    
+jobs:
+  trigger_release:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update Permissions
+        run: chmod +x ./.travis/trigger-release.sh  
+      - name: Trigger Release
+        run: ./.travis/trigger-release.sh
