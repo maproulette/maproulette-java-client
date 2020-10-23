@@ -1,8 +1,6 @@
 
 name: CI
-on:
-  workflow_dispatch:
-    branches: [ main ]
+on: [workflow_dispatch]
     
 jobs:
   trigger_release:
