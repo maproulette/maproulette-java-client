@@ -25,4 +25,4 @@ jobs:
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-        run: ./gradlew clean publishToNexusAndClose -DSONATYPE_USERNAME=$SONATYPE_USERNAME -DSONARTYPE_PASSWORD=$SONARTYPE_PASSWORD
+        run: ./gradlew clean build publishToNexusAndClose -DSONATYPE_USERNAME=$SONATYPE_USERNAME -DSONARTYPE_PASSWORD=$SONARTYPE_PASSWORD
