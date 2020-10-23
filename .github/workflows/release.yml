@@ -21,6 +21,6 @@ jobs:
           java-version: 11
       - name: Build & Publish with Gradle
         env:
-          SONATYPE_USERNAME: ${{ secrets.sonatype_username }}
-          SONATYPE_PASSWORD: ${{ secrets.sonatype_password }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         run: ./gradlew clean publishToNexusAndClose -DSONATYPE_USERNAME=$SONATYPE_USERNAME -DSONARTYPE_PASSWORD=$SONARTYPE_PASSWORD
