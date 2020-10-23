@@ -21,7 +21,6 @@ jobs:
           java-version: 11
       - name: Build & Publish with Gradle
         env:
-          sonar.login: ${{ secrets.SonarCloud }}
-          gpr_username: ${{ secrets.gpr_username }}
-          gpr_token: ${{ secrets.gpr_token }}
-        run: ./gradlew clean build publish -Dgpr_username=$gpr_username -Dgpr_token=$gpr_token
+          SONATYPE_USERNAME: ${{ secrets.sonatype_username }}
+          SONATYPE_PASSWORD: ${{ secrets.sonatype_password }}
+        run: ./gradlew clean publishToNexusAndClose -DSONATYPE_USERNAME=$SONATYPE_USERNAME -DSONARTYPE_PASSWORD=$SONARTYPE_PASSWORD
