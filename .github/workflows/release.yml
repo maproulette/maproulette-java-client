@@ -19,6 +19,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Setup Permissions
+        run: chmod -R +x gradle/ 
       - name: Build & Publish with Gradle
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
