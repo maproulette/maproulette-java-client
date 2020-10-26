@@ -1,6 +1,7 @@
 // nexusStaging {
 //     delayBetweenRetriesInMillis = 5000
 // }
+project.logger.lifecycle("Secret Key : {}, with Key Id: {}, and Passphrase", System.getenv("GPG_KEY_LOCATION"), System.getenv("GPG_KEY_ID"), System.getenv("GPG_PASSPHRASE"))
 
 gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.allTasks.any { it instanceof Sign }) {
