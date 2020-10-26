@@ -19,10 +19,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Setup Permissions
-        run: chmod -R +x gradle/ 
-      - name: Build & Publish with Gradle
+      - name: Update permissions
+        run: chmod -R -x .travis
+      - name: Trigger Release through Travis-CI
         env:
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-        run: ./gradlew clean build publishToNexusAndClose -DSONATYPE_USERNAME=$SONATYPE_USERNAME -DSONARTYPE_PASSWORD=$SONARTYPE_PASSWORD
+          travis_token: ${{ secrets.TRAVIS_TOKEN }}
+        run: ./.travis/trigger-release.sh $travis_token
