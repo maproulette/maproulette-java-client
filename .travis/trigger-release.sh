@@ -10,7 +10,9 @@ GITHUB_REPOSITORY_NAME=maproulette-java-client
 # - The travis client is installed: gem install travis
 # - travis login --org has been called to authenticate
 
-TRAVIS_PERSONAL_TOKEN=$(travis token)
+# To run manually you can either set your token here instead of the input parameter, or uncomment the line below
+#TRAVIS_PERSONAL_TOKEN=$(travis token)
+TRAVIS_PERSONAL_TOKEN="$1"
 
 : ${TRAVIS_PERSONAL_TOKEN:?"TRAVIS_PERSONAL_TOKEN needs to be set to access the Travis API to trigger the build"}
 
