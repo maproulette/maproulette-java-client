@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-if [ $TRAVIS_TEST_RESULT -eq 0 ];
+if [[ $TRAVIS_TEST_RESULT == 0 ]] && [[ 1 == 0 ]];
 then
 	.travis/tag-main.sh
 	RETURN_VALUE=$?
@@ -8,4 +8,6 @@ then
 	then
 		exit $RETURN_VALUE
 	fi
+else 
+    echo "Tagging from Travis is currently disabled!"
 fi
