@@ -4,9 +4,12 @@
 
 gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.allTasks.any { it instanceof Sign }) {
-        allprojects { ext."signing.keyId" = System.getenv('GPG_KEY_ID') }
-        allprojects { ext."signing.secretKeyRingFile" = System.getenv('GPG_KEY_LOCATION') }
-        allprojects { ext."signing.password" = System.getenv('GPG_PASSPHRASE') }
+        //allprojects { ext."signing.keyId" = System.getenv('GPG_KEY_ID') }
+        //allprojects { ext."signing.secretKeyRingFile" = System.getenv('GPG_KEY_LOCATION') }
+        //allprojects { ext."signing.password" = System.getenv('GPG_PASSPHRASE') }
+        allprojects { ext."signing.keyId" = "DA6922F8" }
+        allprojects { ext."signing.secretKeyRingFile" = "/Users/mcuthbert/opensrc/maproulette-java-client_upstream/.travis/secring.gpg" }
+        allprojects { ext."signing.password" = "vH765lkj09e34mnLPA" }
     }
     // Do not sign archives by default (a local build without gpg keyring should succeed)
     if (taskGraph.allTasks.any { it.name == 'build' || it.name == 'assemble' }) {
