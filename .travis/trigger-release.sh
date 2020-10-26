@@ -34,4 +34,4 @@ curl -s -X POST \
 	-H "Travis-API-Version: 3" \
 	-H "Authorization: token $TRAVIS_PERSONAL_TOKEN" \
 	-d "$body" \
-	https://api.travis-ci.org/repo/$GITHUB_ORGANIZATION%2F$GITHUB_REPOSITORY_NAME/requests
+	https://api.travis-ci.com/repo/$GITHUB_ORGANIZATION%2F$GITHUB_REPOSITORY_NAME/requests
