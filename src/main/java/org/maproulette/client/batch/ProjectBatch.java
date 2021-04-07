@@ -73,7 +73,16 @@ public class ProjectBatch
             throws MapRouletteException
     {
         challenge.setParent(this.projectId);
-        final var challengeId = ChallengeBatch.getChallengeId(this.configuration, challenge);
+        final long challengeId;
+        if (challenge.getId() < 0)
+        {
+            challengeId = ChallengeBatch.getChallengeId(this.configuration, challenge);
+            challenge.setId(challengeId);
+        }
+        else
+        {
+            challengeId = challenge.getId();
+        }
         final var challengeBatch = this.batch.getOrDefault(challengeId,
                 new ChallengeBatch(this.configuration, challenge));
         task.setParent(challengeId);
