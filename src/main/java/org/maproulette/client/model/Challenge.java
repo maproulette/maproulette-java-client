@@ -66,6 +66,8 @@ public class Challenge implements IMapRouletteObject, Serializable
     private Integer defaultBasemap;
     private String defaultBasemapId;
     private String customBasemap;
+    @Builder.Default
+    private boolean changesetUrl = false;
 
     public static Challenge fromJson(final String json) throws MapRouletteException
     {
