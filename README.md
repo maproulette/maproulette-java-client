@@ -1,6 +1,6 @@
 # MapRoulette Java Client
 
-![Travis (.org)](https://img.shields.io/travis/osmlab/maproulette-java-client)
+![Travis (.com)](https://img.shields.io/travis/com/osmlab/maproulette-java-client/main)
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/org.maproulette.client/maproulette-java-client?server=https%3A%2F%2Foss.sonatype.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
