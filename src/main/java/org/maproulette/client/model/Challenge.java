@@ -66,6 +66,9 @@ public class Challenge implements IMapRouletteObject, Serializable
     private Integer defaultBasemap;
     private String defaultBasemapId;
     private String customBasemap;
+    private String preferredTags;
+    private String preferredReviewTags;
+    private String[] tags;
     @Builder.Default
     private boolean changesetUrl = false;
 

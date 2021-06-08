@@ -59,4 +59,17 @@ public class ChallengeTest
         Assertions.assertEquals("string", onlyRule.getType());
         Assertions.assertEquals("testValue", onlyRule.getValue());
     }
+
+    @Test
+    public void challengeTagsBuilderTest()
+    {
+        final var challenge = Challenge.builder().parent(12345).name("TestChallenge")
+                .instruction("TestInstruction").preferredTags("preferredTag")
+                .preferredReviewTags("preferredReviewTag").tags(new String[] { "tag1", "tag2" })
+                .build();
+        Assertions.assertEquals("preferredTag", challenge.getPreferredTags());
+        Assertions.assertEquals("preferredReviewTag", challenge.getPreferredReviewTags());
+        Assertions.assertEquals(2, challenge.getTags().length);
+        Assertions.assertEquals("tag1", challenge.getTags()[0]);
+    }
 }
