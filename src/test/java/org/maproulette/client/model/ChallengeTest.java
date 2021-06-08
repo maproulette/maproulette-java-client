@@ -36,6 +36,7 @@ public class ChallengeTest
         Assertions.assertNull(challenge.getDefaultBasemap());
         Assertions.assertNull(challenge.getDefaultBasemapId());
         Assertions.assertNull(challenge.getCustomBasemap());
+        Assertions.assertFalse(challenge.isChangesetUrl());
     }
 
     @Test
