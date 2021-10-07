@@ -44,10 +44,6 @@ dependencies
     checkstyle packages.checkstyle
 }
 
-test {
-    useJUnitPlatform()
-}
-
 /**
  * Artifact related items
  */
