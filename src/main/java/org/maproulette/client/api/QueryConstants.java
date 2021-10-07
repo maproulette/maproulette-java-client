@@ -31,6 +31,8 @@ public final class QueryConstants
     public static final String URI_TASK_BASE = API_VERSION + "/task/%s";
     public static final String URI_TASK_POST = API_VERSION + "/task";
     public static final String URI_TASK_FIND = URI_TASK_POST + URI_FIND;
+    // USER URIS
+    public static final String URI_USER_PUBLIC_BY_ID = API_VERSION + "/user/%d/public";
     // Flags
     public static final String FLAG_IMMEDIATE_DELETE = "immediate";
 

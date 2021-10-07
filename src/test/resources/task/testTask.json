@@ -1,0 +1,94 @@
+{
+  "id": 134825569,
+  "name": "some-name",
+  "created": "2021-09-10T03:38:51.964Z",
+  "modified": "2021-09-15T18:30:57.652Z",
+  "parent": 34786,
+  "instruction": "",
+  "location":
+  {
+    "type": "Point",
+    "coordinates":
+    [
+      12.3392320375663,
+      56.1175800771846
+    ]
+  },
+  "geometries":
+  {
+    "type": "FeatureCollection",
+    "features":
+    [
+      {
+        "id": "some-id",
+        "type": "Feature",
+        "geometry":
+        {
+          "type": "LineString",
+          "coordinates":
+          [
+            [
+              12.3394633,
+              56.1178221
+            ],
+            [
+              12.3393923,
+              56.117798
+            ],
+            [
+              12.3393263,
+              56.1177314
+            ],
+            [
+              12.3391997,
+              56.1175408
+            ],
+            [
+              12.3390849,
+              56.1173754
+            ],
+            [
+              12.3390546,
+              56.1173319
+            ],
+            [
+              12.3390611,
+              56.1172921
+            ]
+          ]
+        },
+        "properties":
+        {
+          "confidence": "252.08934328358208",
+          "maxCountRatio": "0.9874626865671642",
+          "osmIdentifier": "93584898"
+        }
+      }
+    ]
+  },
+  "status": 1,
+  "mappedOn": "2021-09-15T18:30:57.652Z",
+  "completedTimeSpent": 58871,
+  "completedBy": 999,
+  "review":
+  {
+    "reviewStatus": 1,
+    "reviewRequestedBy": 999,
+    "reviewedBy": 9999,
+    "reviewedAt": "2021-09-16T22:16:05.341Z",
+    "reviewStartedAt": "2021-09-16T22:15:56.463Z"
+  },
+  "priority": 0,
+  "changesetId": -1,
+  "bundleId": 67106,
+  "isBundlePrimary": true,
+  "reviewStatus": 1,
+  "reviewRequestedBy": 999,
+  "reviewedBy": 9999,
+  "reviewedAt": "2021-09-16T22:16:05.341Z",
+  "reviewStartedAt": "2021-09-16T22:15:56.463Z",
+  "tags":
+  [
+    ""
+  ]
+}

@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.model.ChallengePriority;
 import org.maproulette.client.model.PointInformation;
 import org.maproulette.client.model.Task;
@@ -80,5 +81,15 @@ public class TaskSerializerTest
         Assertions.assertEquals(task1.getParent(), task2.getParent());
         Assertions.assertEquals(task1.getPriority(), task2.getPriority());
         Assertions.assertEquals(task1.getStatus(), task2.getStatus());
+    }
+
+    @Test
+    public void taskWithStatusFroJson() throws MapRouletteException
+    {
+        final Task task = Task
+                .fromJson(SerializerUtilities.getResourceAsString("task/testTask.json"));
+        Assertions.assertEquals(999, task.getCompletedBy());
+        Assertions.assertEquals(58871, task.getCompletedTimeSpent());
+        Assertions.assertEquals("2021-09-15T18:30:57.652Z", task.getMappedOn());
     }
 }
