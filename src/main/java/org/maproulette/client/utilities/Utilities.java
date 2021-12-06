@@ -1,10 +1,8 @@
 package org.maproulette.client.utilities;
 
-import java.io.IOException;
-
 import org.maproulette.client.exception.MapRouletteException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 /**
  * A generic helper class
@@ -18,8 +16,7 @@ public final class Utilities
     {
         try
         {
-            final var mapper = new ObjectMapper();
-            return mapper.readValue(json, clazz);
+            return ObjectMapperSingleton.getMapper().readValue(json, clazz);
         }
         catch (final IOException e)
         {

@@ -1,0 +1,10 @@
+{
+  "condition": "AND",
+  "rules": [
+    {
+      "value": "priority_pd.3",
+      "type": "string",
+      "operator": "equal"
+    }
+  ]
+}

@@ -12,12 +12,15 @@ import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.model.Challenge;
 import org.maproulette.client.model.Project;
 import org.maproulette.client.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mcuthbert
  */
 public class BatchUploaderIntegrationTest extends IntegrationBase
 {
+    private static final Logger LOG = LoggerFactory.getLogger(BatchUploaderIntegrationTest.class);
     private static final int NUMBER_PROJECTS = 4;
     private static final int NUMBER_CHALLENGES = 3;
     private static final int NUMBER_TASKS = 10;
@@ -83,14 +86,17 @@ public class BatchUploaderIntegrationTest extends IntegrationBase
             final var projectIdentifier = this.getProjectAPI()
                     .create(Project.builder().name(prefix + projectIndex).build()).getId();
             projectList.add(projectIdentifier);
+            LOG.debug("Starting task add for project id={}", projectIdentifier);
             this.addDefaultTasks(batchUploader, projectIdentifier);
         }
         batchUploader.flushAll();
 
+        Assertions.assertEquals(projectList.size(), NUMBER_PROJECTS);
+
         projectList.forEach(throwingConsumerWrapper(identifier ->
         {
             final var children = this.getProjectAPI().children(identifier, NUMBER_TASKS, 0);
-            Assertions.assertEquals(NUMBER_PROJECTS, children.size());
+            Assertions.assertEquals(NUMBER_CHALLENGES, children.size());
             children.forEach(throwingConsumerWrapper(child ->
             {
                 final var tasks = this.getChallengeAPI().children(child.getId(), NUMBER_TASKS, 0);
@@ -111,6 +117,7 @@ public class BatchUploaderIntegrationTest extends IntegrationBase
             for (int taskIndex = 0; taskIndex < NUMBER_TASKS; taskIndex++)
             {
                 uploader.addTask(newChallenge, this.getDefaultTask(-1, "Task" + taskIndex));
+                LOG.debug("Added task name=Task{} parentId={} challengeName={}", taskIndex, parentIdentifier, newChallenge.getName());
             }
         }
     }
