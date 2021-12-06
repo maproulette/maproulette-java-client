@@ -1,6 +1,7 @@
 package org.maproulette.client.serializer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.maproulette.client.model.PriorityRule;
 import org.maproulette.client.model.RuleList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 /**
  * Tests whether a challenge can be read correctly from resources.
@@ -24,7 +26,7 @@ public class ChallengeSerializationTest
     private static final String DESCRIPTION = "DESCRIPTION";
     private static final String BLURB = "BLURB";
     private static final String INSTRUCTION = "INSTRUCTION";
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = ObjectMapperSingleton.getMapper();
 
     @Test
     public void fullSerializationTest() throws IOException
@@ -147,10 +149,12 @@ public class ChallengeSerializationTest
         final var highPriority = RuleList.builder().condition("AND")
                 .rules(Collections.singletonList(PriorityRule.builder().operator("equal")
                         .type("string").value("priority_pd.3").build()))
+                .ruleList(new ArrayList<>())
                 .build();
         final var mediumPriority = RuleList.builder().condition("OR")
                 .rules(Collections.singletonList(PriorityRule.builder().operator("equal")
                         .type("string").value("priority_pd.2").build()))
+                .ruleList(new ArrayList<>())
                 .build();
 
         Assertions.assertEquals(DESCRIPTION, deserializedChallenge.getDescription());

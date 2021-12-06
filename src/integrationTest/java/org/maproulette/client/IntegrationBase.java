@@ -14,6 +14,7 @@ import org.maproulette.client.model.Project;
 public class IntegrationBase
 {
     public static final String DEFAULT_PROJECT_NAME = "IntegrationTestProject1";
+    public static final String ENVIRONMENT_SCHEME = "scheme";
     public static final String ENVIRONMENT_HOST = "host";
     public static final String ENVIRONMENT_PORT = "port";
     public static final String ENVIRONMENT_API_KEY = "apiKey";
@@ -26,6 +27,7 @@ public class IntegrationBase
             .build();
     private long defaultProjectIdentifier = -1;
     private long projectIdentifier = -1;
+    private String scheme;
     private String host;
     private int port;
     private String apiKey;
@@ -114,7 +116,7 @@ public class IntegrationBase
         if (this.configuration == null)
         {
             this.configurationParamsSetUp();
-            this.configuration = new MapRouletteConfiguration(this.host, this.port,
+            this.configuration = new MapRouletteConfiguration(this.scheme, this.host, this.port,
                     DEFAULT_PROJECT_NAME, this.apiKey);
         }
         return this.configuration;
@@ -122,6 +124,12 @@ public class IntegrationBase
 
     private void configurationParamsSetUp()
     {
+        this.scheme = System.getenv(ENVIRONMENT_SCHEME);
+        if (StringUtils.isEmpty(this.scheme))
+        {
+            this.scheme = "https";
+        }
+
         this.host = System.getenv(ENVIRONMENT_HOST);
         if (StringUtils.isEmpty(this.host))
         {

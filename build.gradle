@@ -36,9 +36,11 @@ dependencies
     implementation packages.lombok
     annotationProcessor packages.lombok
 
+    testImplementation packages.slf4j.simple
     testImplementation packages.junit
     testImplementation packages.mockito
 
+    integrationTestImplementation packages.slf4j.simple
     integrationTestImplementation packages.junit
 
     checkstyle packages.checkstyle
