@@ -1,5 +1,13 @@
 package org.maproulette.client.model;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.maproulette.client.exception.MapRouletteRuntimeException;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -11,17 +19,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.maproulette.client.exception.MapRouletteRuntimeException;
-import org.maproulette.client.utilities.ObjectMapperSingleton;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author mcuthbert
@@ -53,44 +55,48 @@ public class RuleList implements Serializable
         try
         {
             return ObjectMapperSingleton.getMapper().writeValueAsString(this);
-        } catch (final JsonProcessingException e)
+        }
+        catch (final JsonProcessingException e)
         {
             throw new MapRouletteRuntimeException(e);
         }
     }
 
+    /**
+     * Serialize a {@code RuleList}
+     */
     public static class RuleListSerializer extends StdSerializer<RuleList>
     {
-
         public RuleListSerializer()
         {
             this(null);
         }
 
-        public RuleListSerializer(Class<RuleList> t)
+        public RuleListSerializer(final Class<RuleList> clazzRuleList)
         {
-            super(t);
+            super(clazzRuleList);
         }
 
-        private static void serializeRuleListHelper(List<RuleList> ruleList, JsonGenerator gen) throws IOException
+        private static void serializeRuleListHelper(final List<RuleList> ruleListList,
+                final JsonGenerator gen) throws IOException
         {
-            for (RuleList r : ruleList)
+            for (final RuleList ruleList : ruleListList)
             {
                 gen.writeStartObject();
-                gen.writeStringField("condition", r.getCondition());
+                gen.writeStringField("condition", ruleList.getCondition());
                 gen.writeArrayFieldStart("rules");
-                if (r.getRuleList() != null)
+                if (ruleList.getRuleList() != null)
                 {
-                    for (RuleList it : r.getRuleList())
+                    for (final RuleList nestedRuleList : ruleList.getRuleList())
                     {
-                        serializeRuleListHelper(it.getRuleList(), gen);
+                        serializeRuleListHelper(nestedRuleList.getRuleList(), gen);
                     }
                 }
-                if (r.getRules() != null)
+                if (ruleList.getRules() != null)
                 {
-                    for (PriorityRule p : r.getRules())
+                    for (final PriorityRule priorityRule : ruleList.getRules())
                     {
-                        gen.writeObject(p);
+                        gen.writeObject(priorityRule);
                     }
                 }
                 gen.writeEndArray();
@@ -99,7 +105,8 @@ public class RuleList implements Serializable
         }
 
         @Override
-        public void serialize(RuleList value, JsonGenerator gen, SerializerProvider serializers) throws IOException
+        public void serialize(final RuleList value, final JsonGenerator gen,
+                final SerializerProvider serializers) throws IOException
         {
             gen.writeStartObject();
             gen.writeStringField("condition", value.getCondition());
@@ -111,9 +118,9 @@ public class RuleList implements Serializable
 
             if (value.getRules() != null)
             {
-                for (PriorityRule p : value.getRules())
+                for (final PriorityRule priorityRule : value.getRules())
                 {
-                    gen.writeObject(p);
+                    gen.writeObject(priorityRule);
                 }
             }
             gen.writeEndArray();
@@ -121,45 +128,46 @@ public class RuleList implements Serializable
         }
     }
 
+    /**
+     * Deserialize a {@code RuleList}
+     */
     public static class RuleListDeserializer extends StdDeserializer<RuleList>
     {
-
         public RuleListDeserializer()
         {
             this(null);
         }
 
-        public RuleListDeserializer(final Class<?> vc)
+        public RuleListDeserializer(final Class<?> valueClass)
         {
-            super(vc);
+            super(valueClass);
         }
 
-        private static RuleList buildRuleListHelper(JsonNode node, DeserializationContext ctxt)
+        private static RuleList buildRuleListHelper(final JsonNode node,
+                final DeserializationContext ctxt)
         {
             if (node.get("condition") == null)
             {
                 return null;
             }
-            final RuleList ret = RuleList.builder()
-                    .condition(node.get("condition").asText())
-                    .ruleList(new ArrayList<>())
-                    .rules(new ArrayList<>())
-                    .build();
+            final RuleList ret = RuleList.builder().condition(node.get("condition").asText())
+                    .ruleList(new ArrayList<>()).rules(new ArrayList<>()).build();
 
-            for (JsonNode it : node.withArray("rules"))
+            for (final JsonNode jsonNode : node.withArray("rules"))
             {
-                if (it.get("condition") != null)
+                if (jsonNode.get("condition") != null)
                 {
-                    // If the child is a PriorityRule, do a recursive call to build the rule and add it to the list.
-                    RuleList child = buildRuleListHelper(it, ctxt);
+                    // If the child is a PriorityRule, do a recursive call to build the rule and add
+                    // it to the list.
+                    final RuleList child = buildRuleListHelper(jsonNode, ctxt);
                     ret.getRuleList().add(child);
-                } else
+                }
+                else
                 {
-                    PriorityRule priorityRule = PriorityRule.builder()
-                            .type(it.get("type").asText())
-                            .operator(it.get("operator").asText())
-                            .value(it.get("value").asText())
-                            .build();
+                    final PriorityRule priorityRule = PriorityRule.builder()
+                            .type(jsonNode.get("type").asText())
+                            .operator(jsonNode.get("operator").asText())
+                            .value(jsonNode.get("value").asText()).build();
                     ret.getRules().add(priorityRule);
                 }
             }
@@ -168,9 +176,10 @@ public class RuleList implements Serializable
         }
 
         @Override
-        public RuleList deserialize(JsonParser p, DeserializationContext ctxt) throws IOException
+        public RuleList deserialize(final JsonParser jsonParser, final DeserializationContext ctxt)
+                throws IOException
         {
-            JsonNode node = p.getCodec().readTree(p);
+            final JsonNode node = jsonParser.getCodec().readTree(jsonParser);
             return buildRuleListHelper(node, ctxt);
         }
     }

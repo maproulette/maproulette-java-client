@@ -12,9 +12,9 @@ import org.maproulette.client.model.ChallengeDifficulty;
 import org.maproulette.client.model.ChallengePriority;
 import org.maproulette.client.model.PriorityRule;
 import org.maproulette.client.model.RuleList;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 /**
  * Tests whether a challenge can be read correctly from resources.
@@ -149,13 +149,11 @@ public class ChallengeSerializationTest
         final var highPriority = RuleList.builder().condition("AND")
                 .rules(Collections.singletonList(PriorityRule.builder().operator("equal")
                         .type("string").value("priority_pd.3").build()))
-                .ruleList(new ArrayList<>())
-                .build();
+                .ruleList(new ArrayList<>()).build();
         final var mediumPriority = RuleList.builder().condition("OR")
                 .rules(Collections.singletonList(PriorityRule.builder().operator("equal")
                         .type("string").value("priority_pd.2").build()))
-                .ruleList(new ArrayList<>())
-                .build();
+                .ruleList(new ArrayList<>()).build();
 
         Assertions.assertEquals(DESCRIPTION, deserializedChallenge.getDescription());
         Assertions.assertEquals(BLURB, deserializedChallenge.getBlurb());
