@@ -1,8 +1,8 @@
 package org.maproulette.client.utilities;
 
-import org.maproulette.client.exception.MapRouletteException;
-
 import java.io.IOException;
+
+import org.maproulette.client.exception.MapRouletteException;
 
 /**
  * A generic helper class

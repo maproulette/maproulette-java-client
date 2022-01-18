@@ -117,7 +117,8 @@ public class BatchUploaderIntegrationTest extends IntegrationBase
             for (int taskIndex = 0; taskIndex < NUMBER_TASKS; taskIndex++)
             {
                 uploader.addTask(newChallenge, this.getDefaultTask(-1, "Task" + taskIndex));
-                LOG.debug("Added task name=Task{} parentId={} challengeName={}", taskIndex, parentIdentifier, newChallenge.getName());
+                LOG.debug("Added task name=Task{} parentId={} challengeName={}", taskIndex,
+                        parentIdentifier, newChallenge.getName());
             }
         }
     }
