@@ -98,7 +98,7 @@ public class Task implements IMapRouletteObject, Serializable
             this.errorTags = errorTags;
             return this;
         }
-        
+
         public TaskBuilder resetGeometry()
         {
             this.geoJson = this.mapper.createArrayNode();
@@ -134,12 +134,13 @@ public class Task implements IMapRouletteObject, Serializable
             {
                 this.parent(-1);
             }
-            if(this.errorTags == null)
+            if (this.errorTags == null)
             {
                 this.errorTags = "";
             }
             return new Task(this.id, this.parent, this.name, this.instruction, this.location,
-                    this.status, this.priority, this.geometries, this.tags, null, null, null, this.errorTags);
+                    this.status, this.priority, this.geometries, this.tags, null, null, null,
+                    this.errorTags);
         }
 
         protected ArrayNode generateTaskFeatures(final Set<PointInformation> source,

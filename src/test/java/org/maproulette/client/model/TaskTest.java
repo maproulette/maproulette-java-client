@@ -96,8 +96,7 @@ public class TaskTest
         final List<String> testTags = Arrays.asList("fixtype=testing", "usecase=1");
         final var task = Task.builder(1234, "Task1")
                 .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.2, 4.5, "TestG"))
-                .errorTags("dummyErrorTags")
-                .tags(testTags).build();
+                .errorTags("dummyErrorTags").tags(testTags).build();
         Assertions.assertEquals("dummyErrorTags", task.getErrorTags());
     }
 
@@ -108,6 +107,6 @@ public class TaskTest
         final var task = Task.builder(1234, "Task1")
                 .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.2, 4.5, "TestG"))
                 .tags(testTags).build();
-        Assertions.assertEquals( "", task.getErrorTags());
+        Assertions.assertEquals("", task.getErrorTags());
     }
 }
