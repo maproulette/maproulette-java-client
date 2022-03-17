@@ -10,22 +10,21 @@ import org.apache.http.client.utils.URIBuilder;
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.exception.MapRouletteRuntimeException;
 import org.maproulette.client.http.ResourceFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The connection class that actually makes the Rest request to the MapRoulette server.
  *
  * @author cuthbertm
  */
+@Slf4j
 public class MapRouletteConnection implements IMapRouletteConnection
 {
     private static final int DEFAULT_CONNECTION_RETRIES = 3;
     private static final int DEFAULT_CONNECTION_WAIT = 5000;
     private static final String KEY_API_KEY = "apiKey";
-    private static final Logger logger = LoggerFactory.getLogger(MapRouletteConnection.class);
     @Getter
     private final MapRouletteConfiguration configuration;
     private final URIBuilder uriBuilder;
@@ -58,17 +57,23 @@ public class MapRouletteConnection implements IMapRouletteConnection
     @Override
     public Optional<String> execute(final Query query) throws MapRouletteException
     {
+        log.trace("Request: {} {} data={}", query.getMethodName(), query.getUri(), query.getData());
+
         // add authentication to the query
         query.addHeader(KEY_API_KEY, this.configuration.getApiKey());
         return query.execute(this.resourceFactory, this.uriBuilder,
                 throwingFunctionWrapper(resource ->
                 {
                     final var statusCode = resource.getStatusCode();
+                    log.trace("Response code: {} ", statusCode);
+
                     switch (statusCode)
                     {
                         case HttpStatus.SC_OK:
                         case HttpStatus.SC_CREATED:
-                            return resource.getRequestBodyAsString();
+                            final String ret = resource.getRequestBodyAsString();
+                            log.trace("Response body: {}", ret);
+                            return ret;
                         case HttpStatus.SC_NO_CONTENT:
                         case HttpStatus.SC_NOT_FOUND:
                             return "";
@@ -104,7 +109,7 @@ public class MapRouletteConnection implements IMapRouletteConnection
             }
             catch (final Exception e)
             {
-                logger.error(
+                log.error(
                         String.format("Failed to connect to MapRoulette [%s]", this.configuration),
                         e);
                 retries++;

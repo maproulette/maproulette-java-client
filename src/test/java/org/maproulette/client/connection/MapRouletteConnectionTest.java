@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.maproulette.client.api.QueryConstants;
 import org.maproulette.client.exception.MapRouletteException;
@@ -19,6 +20,7 @@ import org.maproulette.client.http.ResourceFactory;
 /**
  * @author mcuthbert
  */
+@Disabled
 public class MapRouletteConnectionTest
 {
     @Test

@@ -52,11 +52,16 @@ public class Challenge implements IMapRouletteObject, Serializable
     private String checkinSource = "";
     @NonNull
     private String name;
+
     @Builder.Default
     private ChallengePriority defaultPriority = ChallengePriority.MEDIUM;
-    private RuleList highPriorityRule;
-    private RuleList mediumPriorityRule;
-    private RuleList lowPriorityRule;
+    @Builder.Default
+    private RuleList highPriorityRule = RuleList.builder().build();
+    @Builder.Default
+    private RuleList mediumPriorityRule = RuleList.builder().build();
+    @Builder.Default
+    private RuleList lowPriorityRule = RuleList.builder().build();
+
     @Builder.Default
     private int defaultZoom = DEFAULT_ZOOM;
     @Builder.Default

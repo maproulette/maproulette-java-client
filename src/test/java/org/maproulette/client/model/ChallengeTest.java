@@ -27,9 +27,9 @@ public class ChallengeTest
         Assertions.assertNull(challenge.getDescription());
         Assertions.assertEquals("", challenge.getCheckinComment());
         Assertions.assertEquals("", challenge.getCheckinSource());
-        Assertions.assertNull(challenge.getHighPriorityRule());
-        Assertions.assertNull(challenge.getMediumPriorityRule());
-        Assertions.assertNull(challenge.getLowPriorityRule());
+        Assertions.assertFalse(challenge.getHighPriorityRule().isSet());
+        Assertions.assertFalse(challenge.getMediumPriorityRule().isSet());
+        Assertions.assertFalse(challenge.getLowPriorityRule().isSet());
         Assertions.assertEquals(13, challenge.getDefaultZoom());
         Assertions.assertEquals(1, challenge.getMinZoom());
         Assertions.assertEquals(19, challenge.getMaxZoom());

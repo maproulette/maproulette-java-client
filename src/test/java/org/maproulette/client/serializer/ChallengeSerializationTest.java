@@ -2,6 +2,7 @@ package org.maproulette.client.serializer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
@@ -106,13 +107,13 @@ public class ChallengeSerializationTest
         Assertions.assertEquals(ChallengeDifficulty.NORMAL, deserializedChallenge.getDifficulty());
         Assertions.assertEquals(ChallengePriority.MEDIUM,
                 deserializedChallenge.getDefaultPriority());
-        Assertions.assertNull(deserializedChallenge.getHighPriorityRule());
-        Assertions.assertNull(deserializedChallenge.getMediumPriorityRule());
-        Assertions.assertNull(deserializedChallenge.getLowPriorityRule());
+        Assertions.assertFalse(deserializedChallenge.getHighPriorityRule().isSet());
+        Assertions.assertFalse(deserializedChallenge.getMediumPriorityRule().isSet());
+        Assertions.assertFalse(deserializedChallenge.getLowPriorityRule().isSet());
     }
 
     /**
-     * Test if a challange can be deserialized from a test JSON file. The challenge resource json
+     * Test if a challenge can be deserialized from a test JSON file. The challenge resource json
      * contains no MapRoulette priority information.
      *
      * @throws Exception
@@ -129,9 +130,9 @@ public class ChallengeSerializationTest
         Assertions.assertEquals("", deserializedChallenge.getCheckinComment());
         Assertions.assertEquals(ChallengeDifficulty.NORMAL, deserializedChallenge.getDifficulty());
         Assertions.assertEquals(ChallengePriority.NONE, deserializedChallenge.getDefaultPriority());
-        Assertions.assertNull(deserializedChallenge.getHighPriorityRule());
-        Assertions.assertNull(deserializedChallenge.getMediumPriorityRule());
-        Assertions.assertNull(deserializedChallenge.getLowPriorityRule());
+        Assertions.assertFalse(deserializedChallenge.getHighPriorityRule().isSet());
+        Assertions.assertFalse(deserializedChallenge.getMediumPriorityRule().isSet());
+        Assertions.assertFalse(deserializedChallenge.getLowPriorityRule().isSet());
     }
 
     /**
@@ -154,6 +155,16 @@ public class ChallengeSerializationTest
                 .rules(Collections.singletonList(PriorityRule.builder().operator("equal")
                         .type("string").value("priority_pd.2").build()))
                 .ruleList(new ArrayList<>()).build();
+        final var lowPriority = RuleList.builder().condition("OR")
+                .ruleList(Collections.singletonList(
+                        RuleList.builder().condition("AND").ruleList(new ArrayList<>())
+                                .rules(Arrays.asList(
+                                        PriorityRule.builder().operator(">").type("integer")
+                                                .value("tc.1").build(),
+                                        PriorityRule.builder().operator("<").type("integer")
+                                                .value("tc.2").build()))
+                                .build()))
+                .build();
 
         Assertions.assertEquals(DESCRIPTION, deserializedChallenge.getDescription());
         Assertions.assertEquals(BLURB, deserializedChallenge.getBlurb());
@@ -165,7 +176,7 @@ public class ChallengeSerializationTest
         Assertions.assertEquals(highPriority, deserializedChallenge.getHighPriorityRule());
         Assertions.assertNotNull(deserializedChallenge.getMediumPriorityRule());
         Assertions.assertEquals(mediumPriority, deserializedChallenge.getMediumPriorityRule());
-        Assertions.assertNull(deserializedChallenge.getLowPriorityRule());
+        Assertions.assertEquals(lowPriority, deserializedChallenge.getLowPriorityRule());
     }
 
     /**
