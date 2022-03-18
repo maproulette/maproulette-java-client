@@ -89,4 +89,24 @@ public class TaskTest
         task2 = task2.toBuilder().name("Task2").build();
         Assertions.assertNotEquals(task1.hashCode(), task2.hashCode());
     }
+
+    @Test
+    public void taskWithErrorTags()
+    {
+        final List<String> testTags = Arrays.asList("fixtype=testing", "usecase=1");
+        final var task = Task.builder(1234, "Task1")
+                .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.2, 4.5, "TestG"))
+                .errorTags("dummyErrorTags").tags(testTags).build();
+        Assertions.assertEquals("dummyErrorTags", task.getErrorTags());
+    }
+
+    @Test
+    public void taskWithoutErrorTags()
+    {
+        final List<String> testTags = Arrays.asList("fixtype=testing", "usecase=1");
+        final var task = Task.builder(1234, "Task1")
+                .addGeojson(String.format(TestConstants.FEATURE_STRING, 1.2, 4.5, "TestG"))
+                .tags(testTags).build();
+        Assertions.assertEquals("", task.getErrorTags());
+    }
 }
