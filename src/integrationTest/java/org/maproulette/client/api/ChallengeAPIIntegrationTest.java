@@ -85,6 +85,7 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
                 .customBasemap("customBasemap").build();
 
         final var updatedChallenge = this.getChallengeAPI().update(toUpdateChallenge);
+
         // make sure that it has actually updated.
         this.compareChallenges(toUpdateChallenge, updatedChallenge);
         // now make sure that it is different from the original challenge
@@ -196,7 +197,7 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
 
     private Challenge getBasicChallenge()
     {
-        return Challenge.builder().parent(1234).name("challengeTest").instruction("TestInstruction")
+        return Challenge.builder().name("challengeTest").instruction("TestInstruction")
                 .description("Testing challenge creation").blurb("Testing challenge creation blurb")
                 .difficulty(ChallengeDifficulty.EXPERT).parent(this.getDefaultProjectIdentifier())
                 .build();

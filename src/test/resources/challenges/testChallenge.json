@@ -14,13 +14,24 @@
       }
     ]
   },
-  "mediumPriorityRule": {
+  "mediumPriorityRule": "{\"condition\":\"OR\",\"rules\":[{\"value\":\"priority_pd.2\",\"type\":\"string\",\"operator\":\"equal\"}]}",
+  "lowPriorityRule": {
     "condition": "OR",
     "rules": [
       {
-        "value": "priority_pd.2",
-        "type": "string",
-        "operator": "equal"
+        "condition": "AND",
+        "rules": [
+          {
+            "value": "tc.1",
+            "type": "integer",
+            "operator": ">"
+          },
+          {
+            "value": "tc.2",
+            "type": "integer",
+            "operator": "<"
+          }
+        ]
       }
     ]
   }

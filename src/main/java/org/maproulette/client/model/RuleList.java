@@ -2,18 +2,16 @@ package org.maproulette.client.model;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.maproulette.client.exception.MapRouletteRuntimeException;
-import org.maproulette.client.utilities.ObjectMapperSingleton;
-
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,6 +22,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author mcuthbert
@@ -34,32 +34,40 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonDeserialize(using = RuleList.RuleListDeserializer.class)
 @JsonSerialize(using = RuleList.RuleListSerializer.class)
+@Slf4j
 public class RuleList implements Serializable
 {
     private static final String KEY_CONDITION = "condition";
     private static final String KEY_RULES = "rules";
     private static final long serialVersionUID = -1085774480815117637L;
 
-    private String condition;
-    private List<RuleList> ruleList;
-    private List<PriorityRule> rules;
+    @Builder.Default
+    @NonNull
+    private String condition = "";
+
+    @Builder.Default
+    @NonNull
+    private List<RuleList> ruleList = new ArrayList<>();
+
+    @Builder.Default
+    @NonNull
+    private List<PriorityRule> rules = new ArrayList<>();
 
     public boolean isSet()
     {
-        return this.condition != null && this.rules != null && !this.rules.isEmpty();
-    }
+        // A condition is needed
+        if (this.condition == null || this.condition.isEmpty())
+        {
+            return false;
+        }
+        // It is possible to have an empty 'rules' and a non-empty nested rule list.
+        // It is invalid for both to be empty at the same time.
+        if (this.rules.isEmpty() && this.ruleList.isEmpty())
+        {
+            return false;
+        }
 
-    @JsonValue
-    public String toJson()
-    {
-        try
-        {
-            return ObjectMapperSingleton.getMapper().writeValueAsString(this);
-        }
-        catch (final JsonProcessingException e)
-        {
-            throw new MapRouletteRuntimeException(e);
-        }
+        return true;
     }
 
     /**
@@ -104,8 +112,7 @@ public class RuleList implements Serializable
             }
         }
 
-        @Override
-        public void serialize(final RuleList value, final JsonGenerator gen,
+        private void serializeRuleListAsObject(final RuleList value, final JsonGenerator gen,
                 final SerializerProvider serializers) throws IOException
         {
             gen.writeStartObject();
@@ -125,11 +132,46 @@ public class RuleList implements Serializable
             }
             gen.writeEndArray();
             gen.writeEndObject();
+            gen.flush();
+        }
+
+        /**
+         * Serialize a RuleList in a format that is compatible with the existing scala backend
+         * service. The end format must be a json escaped string and not an object. The deserializer
+         * supports either format: a json string or an object. <br>
+         * <br>
+         * For example:
+         * "highPriorityRule":"{\"condition\":\"AND\",\"rules\":[{\"value\":\"priority_pd.3\",\"type\":\"string\",\"operator\":\"equal\"}]}"
+         * {@inheritDoc}
+         */
+        @Override
+        public void serialize(final RuleList value, final JsonGenerator gen,
+                final SerializerProvider serializers) throws IOException
+        {
+            // If the RuleList is not "set", write an empty object string.
+            if (!value.isSet())
+            {
+                gen.writeString("{}");
+                return;
+            }
+
+            // First create a temporary jsongenerator to hold the serialized nested RuleList object.
+            final StringWriter stringWriter = new StringWriter();
+            final JsonGenerator tempGen = new JsonFactory().setCodec(gen.getCodec())
+                    .createGenerator(stringWriter);
+            serializeRuleListAsObject(value, tempGen, serializers);
+
+            // Now get the serialized RuleList as a string and write it as a plain string.
+            final String ruleListAsString = stringWriter.toString();
+            gen.writeString(ruleListAsString);
+            stringWriter.close();
+            tempGen.close();
         }
     }
 
     /**
-     * Deserialize a {@code RuleList}
+     * Deserialize a {@code RuleList}. The serialized format may be either a json escaped string or
+     * an object.
      */
     public static class RuleListDeserializer extends StdDeserializer<RuleList>
     {
@@ -146,9 +188,11 @@ public class RuleList implements Serializable
         private static RuleList buildRuleListHelper(final JsonNode node,
                 final DeserializationContext ctxt)
         {
+            // When the serialized format lacks required values, just create an empty RuleList to
+            // avoid NPE.
             if (node.get("condition") == null)
             {
-                return null;
+                return RuleList.builder().build();
             }
             final RuleList ret = RuleList.builder().condition(node.get("condition").asText())
                     .ruleList(new ArrayList<>()).rules(new ArrayList<>()).build();
@@ -175,12 +219,40 @@ public class RuleList implements Serializable
             return ret;
         }
 
+        /**
+         * Deserialize the escaped json string or object into a RuleList. <br>
+         * <br>
+         * For example the escaped json string looks like this
+         * "{\"condition\":\"AND\",\"rules\":[{\"value\":\"priority_pd.3\",\"type\":\"string\",\"operator\":\"equal\"}]}"
+         * or like this
+         * {"condition":"AND","rules":[{"value":"priority_pd.3","type":"string","operator":"equal"}]}
+         * {@inheritDoc}
+         */
         @Override
         public RuleList deserialize(final JsonParser jsonParser, final DeserializationContext ctxt)
                 throws IOException
         {
-            final JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            return buildRuleListHelper(node, ctxt);
+            // The json could be an escaped string representation or an object representation of a
+            // RuleList
+            final JsonNode tree = jsonParser.readValueAsTree();
+
+            if (tree.isContainerNode())
+            {
+                // It's an object representation, pass it on for parsing
+                return buildRuleListHelper(tree, ctxt);
+            }
+            else
+            {
+                // First read out the string which is the escaped json of the RuleList
+                final String ruleListString = jsonParser.getCodec().treeToValue(tree, String.class);
+
+                // Take the string and convert it to a JsonNode
+                final JsonNode ruleListNode = ((ObjectMapper) jsonParser.getCodec())
+                        .readTree(ruleListString);
+
+                // Recursively parse the node tree
+                return buildRuleListHelper(ruleListNode, ctxt);
+            }
         }
     }
 }
