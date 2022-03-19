@@ -71,7 +71,7 @@ public class MapRouletteConnection implements IMapRouletteConnection
                     {
                         case HttpStatus.SC_OK:
                         case HttpStatus.SC_CREATED:
-                            final String ret = resource.getRequestBodyAsString();
+                            final String ret = resource.getResponseBodyAsString();
                             log.trace("Response body: {}", ret);
                             return ret;
                         case HttpStatus.SC_NO_CONTENT:
@@ -80,7 +80,7 @@ public class MapRouletteConnection implements IMapRouletteConnection
                         default:
                             throw new MapRouletteException(
                                     String.format("Invalid response status code %d - %s",
-                                            statusCode, resource.getRequestBodyAsString()));
+                                            statusCode, resource.getResponseBodyAsString()));
                     }
                 }));
     }

@@ -62,7 +62,7 @@ public class MapRouletteConnectionTest
         when(deleteResource.getStatusCode()).thenReturn(HttpStatus.SC_NOT_FOUND)
                 .thenReturn(HttpStatus.SC_NO_CONTENT).thenReturn(HttpStatus.SC_OK)
                 .thenReturn(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-        when(deleteResource.getRequestBodyAsString()).thenReturn("test");
+        when(deleteResource.getResponseBodyAsString()).thenReturn("test");
         final var query = Query.builder().delete("").build();
         Assertions.assertTrue(connection.execute(query).isEmpty());
         Assertions.assertTrue(connection.execute(query).isEmpty());
@@ -80,7 +80,7 @@ public class MapRouletteConnectionTest
         when(getResource.getStatusCode()).thenReturn(HttpStatus.SC_NOT_FOUND)
                 .thenReturn(HttpStatus.SC_NO_CONTENT).thenReturn(HttpStatus.SC_OK);
         final var responseString = "{\"test\":\"test\"}";
-        when(getResource.getRequestBodyAsString()).thenReturn(responseString);
+        when(getResource.getResponseBodyAsString()).thenReturn(responseString);
 
         final var query = Query.builder().get("").build();
         // First request will respond with NOT_FOUND
@@ -103,7 +103,7 @@ public class MapRouletteConnectionTest
         final var postResource = factory.resource(HttpPost.METHOD_NAME);
         when(postResource.getStatusCode()).thenReturn(HttpStatus.SC_CREATED)
                 .thenReturn(HttpStatus.SC_OK).thenReturn(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-        when(postResource.getRequestBodyAsString()).thenReturn("{\"id\":1234}")
+        when(postResource.getResponseBodyAsString()).thenReturn("{\"id\":1234}")
                 .thenReturn("{\"id\":6543}");
         final var query = Query.builder().post("").build();
         Assertions.assertEquals(Optional.of("{\"id\":1234}"), connection.execute(query));
