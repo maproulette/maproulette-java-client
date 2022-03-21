@@ -95,7 +95,7 @@ public abstract class HttpResource implements Closeable
         return this.response.getHeaders(headerKey);
     }
 
-    public String getRequestBodyAsString() throws MapRouletteException
+    public String getResponseBodyAsString() throws MapRouletteException
     {
         try
         {
