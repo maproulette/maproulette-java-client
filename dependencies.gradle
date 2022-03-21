@@ -15,7 +15,6 @@ project.ext.packages = [
     slf4j: [
         api: "org.slf4j:slf4j-api:${versions.slf4j}",
         simple: "org.slf4j:slf4j-simple:${versions.slf4j}",
-        log4j12: "org.slf4j:slf4j-log4j12:${versions.slf4j}",
     ],
     http: "org.apache.httpcomponents:httpclient:${versions.http}",
     checkstyle: "com.puppycrawl.tools:checkstyle:${versions.checkstyle}",

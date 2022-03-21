@@ -8,7 +8,7 @@ The MapRoulette Java Client is a java library that makes it easy to create Proje
 
 ### Contributing
 
-For contributing guidelines see [CONTRIBUTING.md](CONTRIBUTING.md).
+For contributing guidelines see [CONTRIBUTING.md](CONTRIBUTING.md). These guidelines are essential for anyone providing code contributions.
 
 ### API
 
