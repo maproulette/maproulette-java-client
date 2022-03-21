@@ -8,6 +8,16 @@ checkstyle
     toolVersion = versions.checkstyle
 }
 
+spotbugs {
+    ignoreFailures = true
+}
+spotbugsMain {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
 sourceSets
 {
     integrationTest
