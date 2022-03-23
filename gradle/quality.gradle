@@ -33,11 +33,12 @@ test
 }
 
 task integrationTest(type: Test) {
+    useJUnitPlatform()
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     testLogging
     {
-        events "failed"
+        events "passed", "skipped", "failed"
         exceptionFormat = 'full'
     }
 }
