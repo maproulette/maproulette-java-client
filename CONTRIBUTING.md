@@ -52,16 +52,13 @@ Once you have fixed an issue or added a new feature, it is time to submit [a pul
 Building MapRoulette Java Client can be simply done using gradle:
 `./gradlew clean build`
 
-#### Log4j Properties
+#### Log Levels
 
-Make sure you first have a `log4j.properties` file in `src/main/resources`. 
-Alternatively, you can have as a VM parameter:
+The unit tests and integration tests use the `slf4j-simple` logging framework.
 
-``` 
--Dlog4j.configuration=file://<path_to_config>
-```
+The log level defaults to `info` and can be changed within the test resources `./src/test/resources/simplelogger.properties`.
+Logging at the `trace` level will log all HTTP requests (and payloads) and all HTTP responeses (and payloads).
 
-https://github.com/osmlab/maproulette-java-client/blob/dev/config/log4j/log4j.properties
 
 #### IntelliJ Setup
 
@@ -76,6 +73,8 @@ There also is an eclipse code formatting template [here](config/format/code_form
 ### Testing
 
 The codebase contains an extensive range of unit tests. Unit tests are supposed to run fairly fast. All the tests will be run for every pull request build, so make sure that it doesn't take an exceptionally long time to run! When contributing new code, make sure to not break existing tests (or modify them and explain why the modification is needed) and to add new tests for new features.
+
+Using the `trace` logging level may help in finding the root cause of a test failure.
 
 ### Pull Request Guidelines
 
