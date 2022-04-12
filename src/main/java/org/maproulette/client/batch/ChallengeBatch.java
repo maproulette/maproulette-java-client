@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChallengeBatch
 {
-    private static final int MAXIMUM_BATCH_SIZE = 5000;
+    private static final int MAXIMUM_BATCH_SIZE = 500;
     private final Logger logger = LoggerFactory.getLogger(ChallengeBatch.class);
     private final ObjectMapper mapper = new ObjectMapper();
     private final IMapRouletteConnection connection;
@@ -140,8 +140,8 @@ public class ChallengeBatch
     {
         final var uniqueTasks = new ArrayList<Task>(data.size());
         uniqueTasks.addAll(data);
-        // MAXIMUM batch size is 5000, so if greater than 5000, we need to make multiple
-        // requests in groups of 5000
+        // MAXIMUM batch size is 500, so if greater than 500, we need to make multiple
+        // requests in groups of 500
         var succeeded = true;
         var startIndex = 0;
         int endIndex;
