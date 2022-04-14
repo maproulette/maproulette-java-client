@@ -5,8 +5,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.maproulette.client.model.Project;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 /**
  * Tests serialization and deserialization of the {@link Project} object
@@ -18,7 +17,7 @@ public class ProjectSerializationTest
     @Test
     public void projectSerializationTest() throws IOException
     {
-        final var mapper = new ObjectMapper();
+        final var mapper = ObjectMapperSingleton.getMapper();
         final var project = Project.builder().name("TestProject").description("TestDescription")
                 .displayName("TestDisplayName").enabled(true).id(6875L).build();
         final var projectJson = mapper.writeValueAsString(project);
@@ -30,7 +29,7 @@ public class ProjectSerializationTest
     @Test
     public void fromJsonTest() throws Exception
     {
-        final var mapper = new ObjectMapper();
+        final var mapper = ObjectMapperSingleton.getMapper();
         final var project = Project.builder().name("TestProject").description("TestDescription")
                 .displayName("TestDisplayName").enabled(true).id(6875L).build();
         final var projectJson = mapper.writeValueAsString(project);
