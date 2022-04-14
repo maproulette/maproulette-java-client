@@ -83,8 +83,10 @@ public class ProjectBatch
         {
             challengeId = challenge.getId();
         }
-        final var challengeBatch = this.batch.getOrDefault(challengeId,
-                new ChallengeBatch(this.configuration, challenge));
+
+        final var challengeBatch = this.batch.computeIfAbsent(challengeId,
+                k -> new ChallengeBatch(this.configuration, challenge));
+
         task.setParent(challengeId);
         challengeBatch.addTask(task);
         this.batch.put(challengeId, challengeBatch);
