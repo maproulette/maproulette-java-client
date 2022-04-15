@@ -1,20 +1,40 @@
-name: Pull Request Build
-on: [pull_request]
+name: CI Build
+on:
+  push:
+  pull_request:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgis11:
+        image: postgis/postgis:11-2.5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: mr_test
+          POSTGRES_USER: osm
+          POSTGRES_PASSWORD: osm
+
     strategy:
       matrix:
         # Jdk 17 requires gradle 7.3+ https://docs.gradle.org/current/userguide/compatibility.html
         java: [11]
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
+          path: 'java-client'
+          fetch-depth: 0
+      - uses: actions/checkout@v3
+        with:
+          repository: 'maproulette/maproulette2'
+          path: 'maproulette2'
           fetch-depth: 0
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v2
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
       - uses: actions/cache@v2.1.7
         id: gradle-cache
@@ -28,8 +48,49 @@ jobs:
           path: |
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradlewrapper-${{ hashFiles('gradle/wrapper/*') }}
-      - name: Build
-        run: ./gradlew build
+      - name: Build maproulette-java-client
+        run: |
+          pushd java-client
+          ./gradlew build
+
+      - name: Build maproulette2 sbt
+        run: |
+          pushd maproulette2
+          sbt compile
+      - name: Create the maproulette2 dev.conf
+        run: |
+          pushd maproulette2
+          touch ./conf/dev.conf
+          echo 'include "application.conf"' >> ./conf/dev.conf
+          echo 'db.default {' >> ./conf/dev.conf
+          echo '  url="jdbc:postgresql://localhost:5432/mr_test"' >> ./conf/dev.conf
+          echo '  username="osm"' >> ./conf/dev.conf
+          echo '  password="osm"' >> ./conf/dev.conf
+          echo '}' >> ./conf/dev.conf
+          echo 'maproulette {' >> ./conf/dev.conf
+          echo '  debug=true' >> ./conf/dev.conf
+          echo '  bootstrap=true' >> ./conf/dev.conf
+          echo '  super.key="1234"' >> ./conf/dev.conf
+          echo '  super.accounts=""' >> ./conf/dev.conf
+          echo '}' >> ./conf/dev.conf
+      - name: Run the integration tests
+        env:
+          SBT_OPTS: "-Xms512M -Xmx1024M -Xss2M -XX:MaxMetaspaceSize=1024M"
+          API_HOST: 127.0.0.1:9000
+          host: 127.0.0.1
+          scheme: http
+          apiKey: 1234
+        run: |
+          pushd maproulette2
+          sbt -Dconfig.file=./conf/dev.conf run &
+          sleep 15
+          popd
+          pushd java-client
+          ./gradlew --info --project-prop runIntegrationTests \
+            clean integrationTest \
+            --tests '*BatchUploaderIntegrationTest*' \
+            --tests '*ChallengeAPIIntegrationTest*'
+
   validation:
     name: "Gradle Validation"
     runs-on: ubuntu-latest
