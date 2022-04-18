@@ -88,8 +88,11 @@ public class BatchUploader
         {
             identifier = this.getDefaultProjectIdentifier();
         }
-        final var projectBatch = this.projectBatchMap.getOrDefault(identifier,
-                new ProjectBatch(identifier, this.configuration));
+
+        final long finalIdentifier = identifier;
+        final var projectBatch = this.projectBatchMap.computeIfAbsent(identifier,
+                k -> new ProjectBatch(finalIdentifier, this.configuration));
+
         final var challengeId = projectBatch.addTask(challenge, task);
         this.projectBatchMap.put(identifier, projectBatch);
         return new Tuple<>(identifier, challengeId);
@@ -131,6 +134,16 @@ public class BatchUploader
         });
     }
 
+    /**
+     * Get the project id for the configuration's default project name. If the project id is not yet
+     * known, HTTP requests will be make to (1) get the default project and (2) if the default
+     * project doesn't exist create it. <br>
+     * THIS METHOD MAY MAKE EXTERNAL HTTP REQUESTS. <br>
+     *
+     * @return project id
+     * @throws MapRouletteException
+     *             when the requests fail
+     */
     private long getDefaultProjectIdentifier() throws MapRouletteException
     {
         if (this.defaultProjectIdentifier == -1)

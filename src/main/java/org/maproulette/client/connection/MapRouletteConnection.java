@@ -57,7 +57,11 @@ public class MapRouletteConnection implements IMapRouletteConnection
     @Override
     public Optional<String> execute(final Query query) throws MapRouletteException
     {
-        log.trace("Request: {} {} data={}", query.getMethodName(), query.getUri(), query.getData());
+        log.debug("Request: {} {}", query.getMethodName(), query.getUri());
+        if (log.isTraceEnabled())
+        {
+            log.trace("data={}", query.getData());
+        }
 
         // add authentication to the query
         query.addHeader(KEY_API_KEY, this.configuration.getApiKey());

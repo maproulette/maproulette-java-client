@@ -15,6 +15,7 @@ import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.exception.MapRouletteRuntimeException;
 import org.maproulette.client.model.Challenge;
 import org.maproulette.client.model.Task;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public class ChallengeBatch
 {
     private static final int MAXIMUM_BATCH_SIZE = 5000;
     private final Logger logger = LoggerFactory.getLogger(ChallengeBatch.class);
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = ObjectMapperSingleton.getMapper();
     private final IMapRouletteConnection connection;
     private final long challengeId;
     private final int maxBatchSize;
@@ -116,6 +117,8 @@ public class ChallengeBatch
         this.batch.add(task);
         if (this.batch.size() >= this.maxBatchSize)
         {
+            this.logger.debug("FLUSHING queued tasks as batch size {} meets max {}",
+                    this.batch.size(), this.maxBatchSize);
             this.flush();
         }
     }
