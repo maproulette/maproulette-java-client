@@ -23,7 +23,7 @@ public class BatchUploaderIntegrationTest extends IntegrationBase
     private static final Logger LOG = LoggerFactory.getLogger(BatchUploaderIntegrationTest.class);
     private static final int NUMBER_PROJECTS = 4;
     private static final int NUMBER_CHALLENGES = 3;
-    private static final int NUMBER_TASKS = 30000;
+    private static final int NUMBER_TASKS = 10;
 
     @Test
     public void batchTest() throws MapRouletteException
