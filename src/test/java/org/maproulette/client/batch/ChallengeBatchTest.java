@@ -16,10 +16,10 @@ import org.maproulette.client.api.QueryConstants;
 import org.maproulette.client.connection.MapRouletteConnection;
 import org.maproulette.client.connection.Query;
 import org.maproulette.client.model.Task;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 import org.mockito.ArgumentCaptor;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author mcuthbert
@@ -38,7 +38,7 @@ public class ChallengeBatchTest
         challengeBatch.addTasks(multipleTasks);
         challengeBatch.flush();
 
-        final var mapper = new ObjectMapper();
+        final var mapper = ObjectMapperSingleton.getMapper();
         final var postData = mapper.createArrayNode();
         final var tasks = Arrays.asList(this.task("Task1", 12), this.task("Task2", 12),
                 this.task("Task3", 12), this.task("Task4", 12), this.task("task5", 12));

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.exception.MapRouletteRuntimeException;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 import org.maproulette.client.utilities.Utilities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -51,7 +52,7 @@ public class Task implements IMapRouletteObject, Serializable
         private static final String TASK_FEATURE_PROPERTIES = "properties";
         private static final String FEATURE = "feature";
         private static final String POINT = "point";
-        private final ObjectMapper mapper = new ObjectMapper();
+        private final ObjectMapper mapper = ObjectMapperSingleton.getMapper();
         private final Set<PointInformation> points = new HashSet<>();
         private ArrayNode geoJson = this.mapper.createArrayNode();
 

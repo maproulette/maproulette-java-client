@@ -10,8 +10,7 @@ import org.maproulette.client.model.ChallengePriority;
 import org.maproulette.client.model.PointInformation;
 import org.maproulette.client.model.Task;
 import org.maproulette.client.model.TaskStatus;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 /**
  * @author mcuthbert
@@ -22,7 +21,7 @@ public class TaskSerializerTest
     public void serializationTest() throws IOException
     {
         final var testFeatureString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[%s, %s]},\"properties\": {\"name\":\"%s\"}}";
-        final var mapper = new ObjectMapper();
+        final var mapper = ObjectMapperSingleton.getMapper();
         final var pointList = Arrays.asList(new PointInformation(1.0, 2.0),
                 new PointInformation(5.4, 8.7));
 
@@ -41,7 +40,7 @@ public class TaskSerializerTest
     public void geometriesSerializationTest() throws IOException
     {
         final var testFeatureString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[%s, %s]},\"properties\": {\"name\":\"%s\"}}";
-        final var mapper = new ObjectMapper();
+        final var mapper = ObjectMapperSingleton.getMapper();
         final var task = Task.builder(343444454, "TestTask").id(12355655)
                 .instruction("TestInstruction").priority(ChallengePriority.HIGH)
                 .status(TaskStatus.DELETED)
@@ -56,7 +55,7 @@ public class TaskSerializerTest
     public void fromJsonTest() throws Exception
     {
         final var testFeatureString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[%s, %s]},\"properties\": {\"name\":\"%s\"}}";
-        final var mapper = new ObjectMapper();
+        final var mapper = ObjectMapperSingleton.getMapper();
         final var pointList = Arrays.asList(new PointInformation(1.0, 2.0),
                 new PointInformation(5.4, 8.7));
 

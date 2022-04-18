@@ -10,6 +10,7 @@ import org.maproulette.client.connection.MapRouletteConnection;
 import org.maproulette.client.connection.Query;
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.model.User;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class UserAPI
 {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = ObjectMapperSingleton.getMapper();
     private final IMapRouletteConnection connection;
 
     public UserAPI(final MapRouletteConfiguration configuration)

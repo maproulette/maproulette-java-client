@@ -11,8 +11,8 @@ import org.maproulette.client.model.Challenge;
 import org.maproulette.client.model.ChallengePriority;
 import org.maproulette.client.model.Task;
 import org.maproulette.client.model.TaskStatus;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 /**
@@ -119,7 +119,7 @@ public class TaskAPIIntegrationTest extends IntegrationBase
                 .addGeojson(String.format(TestConstants.FEATURE_STRING, 3.1, 4.2, UPDATED_GEOMETRY))
                 .build();
 
-        final ObjectMapper mapper = new ObjectMapper();
+        final var mapper = ObjectMapperSingleton.getMapper();
         final ArrayNode arrayNode = mapper.createArrayNode();
         Assertions.assertNotNull(created.get().getGeometries().get(TASK_FEATURES).get(0));
         Assertions.assertNotNull(update.getGeometries().get(TASK_FEATURES).get(0));

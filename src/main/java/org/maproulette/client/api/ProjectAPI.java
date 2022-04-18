@@ -13,6 +13,7 @@ import org.maproulette.client.connection.Query;
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.model.Challenge;
 import org.maproulette.client.model.Project;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProjectAPI implements IAPI<Project>
 {
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = ObjectMapperSingleton.getMapper();
     private final IMapRouletteConnection connection;
 
     public ProjectAPI(final MapRouletteConfiguration configuration)
