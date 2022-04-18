@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 public class MapRouletteConfiguration implements Serializable
 {
-    private static final int DEFAULT_BATCH_SIZE = 5000;
+    private static final int DEFAULT_BATCH_SIZE = 500;
     private static final int API_KEY_INDEX = 3;
     private static final int NUMBER_OF_COMPONENTS = 4;
     private static final int PORT_INDEX = 1;
