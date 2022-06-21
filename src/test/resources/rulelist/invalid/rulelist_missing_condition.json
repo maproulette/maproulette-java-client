@@ -1,0 +1,10 @@
+{
+  "_comment_": "The rulelist 'condition' is missing in this json. An exception should be thrown.",
+  "rules": [
+    {
+      "value": "priority_pd.3",
+      "type": "string",
+      "operator": "equal"
+    }
+  ]
+}

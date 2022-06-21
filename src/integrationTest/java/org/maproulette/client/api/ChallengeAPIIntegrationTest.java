@@ -80,7 +80,7 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
                 .name("UpdatedName").defaultPriority(ChallengePriority.LOW)
                 .highPriorityRule(this.getRuleList("OR", "pr.high"))
                 .mediumPriorityRule(this.getRuleList("AND", "pr.medium"))
-                .lowPriorityRule(this.getRuleList("or", "pr.low")).defaultZoom(11).minZoom(10)
+                .lowPriorityRule(this.getRuleList("OR", "pr.low")).defaultZoom(11).minZoom(10)
                 .maxZoom(12).defaultBasemapId("defaultBaseMap").defaultBasemap(67)
                 .customBasemap("customBasemap").build();
 
@@ -115,6 +115,7 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
                 updatedChallenge.getDefaultBasemap());
         Assertions.assertNotEquals(createdChallenge.getCustomBasemap(),
                 updatedChallenge.getCustomBasemap());
+        Assertions.assertTrue(updatedChallenge.getHighPriorityRule().getCondition().equals("OR"));
     }
 
     @Test
@@ -164,8 +165,9 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
     private RuleList getRuleList(final String condition, final String value)
     {
         return RuleList.builder().condition(condition).rules(Collections.singletonList(
-                PriorityRule.builder().operator("equals").type("string").value(value).build()))
+                PriorityRule.builder().operator("equal").type("string").value(value).build()))
                 .build();
+
     }
 
     private void compareChallenges(final Challenge challenge1, final Challenge challenge2)

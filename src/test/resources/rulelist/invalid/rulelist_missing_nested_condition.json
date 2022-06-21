@@ -1,0 +1,20 @@
+{
+  "condition": "AND",
+  "rules": [
+    {
+      "value": "t.u",
+      "type": "string",
+      "operator": "is_empty"
+    },
+    {
+      "_MISSING_condition": "",
+      "rules": [
+        {
+          "value": "a.b",
+          "type": "string",
+          "operator": "is_not_empty"
+        }
+      ]
+    }
+  ]
+}

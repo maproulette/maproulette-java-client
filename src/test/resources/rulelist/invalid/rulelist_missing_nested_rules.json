@@ -1,0 +1,14 @@
+{
+  "condition": "AND",
+  "rules": [
+    {
+      "value": "t.u",
+      "type": "string",
+      "operator": "is_empty"
+    },
+    {
+      "condition": "AND",
+      "_MISSING_rules": []
+    }
+  ]
+}

@@ -6,9 +6,13 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.maproulette.client.exception.MapRouletteRuntimeParseException;
 import org.maproulette.client.model.PriorityRule;
 import org.maproulette.client.model.RuleList;
 import org.maproulette.client.utilities.ObjectMapperSingleton;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * Test the serialization and deserialization of simple and nested {@code RuleList} objects/json.
@@ -107,4 +111,141 @@ public class RuleListSerializationDeserializationTest
                 ObjectMapperSingleton.getMapper().writeValueAsString(expected)), expected);
         Assertions.assertEquals(expected, actualReordered);
     }
+
+    @Test
+    public void invalidRuleListMissingTopLevelCondition()
+    {
+        // Serialization
+        final RuleList invalidRuleList = RuleList.builder().condition("")
+                .rules(Collections.singletonList(PriorityRule.builder().value("t.u").type("string")
+                        .operator("equal").build()))
+                .build();
+        Assertions.assertThrows(JsonMappingException.class, () ->
+        {
+            ObjectMapperSingleton.getMapper().writeValueAsString(invalidRuleList);
+        }, "Expected a parse exception");
+
+        // Deserialization
+        Assertions.assertThrows(MapRouletteRuntimeParseException.class, () ->
+        {
+            final RuleList actual = resourceToRuleList(
+                    "rulelist/invalid/rulelist_missing_condition.json");
+        }, "Expected a parse exception");
+    }
+
+    @Test
+    public void invalidRuleListMissingNestedCondition()
+    {
+        // Serialization
+        final RuleList invalidRuleList = RuleList.builder().condition("AND")
+                .rules(Collections.singletonList(PriorityRule
+                        .builder().value("t.u").type("string").operator("is_empty").build()))
+                .ruleList(Collections.singletonList(
+                        // Invalid because the condition is empty within a nested rule list
+                        RuleList.builder().condition("")
+                                .rules(Collections.singletonList(PriorityRule.builder().value("a.b")
+                                        .type("string").operator("is_not_empty").build()))
+                                .build()))
+                .build();
+        Assertions.assertThrows(JsonMappingException.class, () ->
+        {
+            ObjectMapperSingleton.getMapper().writeValueAsString(invalidRuleList);
+        }, "Expected a parse exception");
+
+        // Deserialization
+        Assertions.assertThrows(MapRouletteRuntimeParseException.class, () ->
+        {
+            final RuleList actual = resourceToRuleList(
+                    "rulelist/invalid/rulelist_missing_nested_condition.json");
+        }, "Expected a parse exception");
+    }
+
+    @Test
+    public void invalidRuleListMissingNestedRules() throws JsonProcessingException
+    {
+        // Serialization
+        // The serialization test case can't exactly reproduce the json since the 'rules' list
+        // cannot be null and an empty list is okay.
+        // So instead just make sure that the nested rule list can be built with a condition and
+        // empty rules.
+        final RuleList ruleList = RuleList.builder().condition("AND")
+                .rules(Collections.singletonList(PriorityRule.builder().value("t.u").type("string")
+                        .operator("is_empty").build()))
+                .ruleList(Collections.singletonList(RuleList.builder().condition("AND").build()))
+                .build();
+        final String ruleListAsString = ObjectMapperSingleton.getMapper()
+                .writeValueAsString(ruleList);
+
+        // Deserialization
+        Assertions.assertThrows(MapRouletteRuntimeParseException.class, () ->
+        {
+            final RuleList actual = resourceToRuleList(
+                    "rulelist/invalid/rulelist_missing_nested_rules.json");
+        }, "Expected a parse exception");
+    }
+
+    @Test
+    public void invalidRuleListMissingNestedAll()
+    {
+        // Serialization
+        Assertions.assertThrows(NullPointerException.class, () ->
+        {
+            final RuleList invalidRuleList = RuleList.builder().condition("AND")
+                    .rules(Collections.singletonList(PriorityRule.builder().build())).build();
+        }, "Expected NPE since the priority rule is invalid");
+
+        // Deserialization
+        Assertions.assertThrows(MapRouletteRuntimeParseException.class, () ->
+        {
+            final RuleList actual = resourceToRuleList(
+                    "rulelist/invalid/rulelist_missing_nested_all.json");
+        }, "Expected a parse exception");
+    }
+
+    @Test
+    public void conditionTypo()
+    {
+        // Serialization
+        final RuleList invalidRuleList = RuleList
+                .builder().condition("aanddd").rules(Collections.singletonList(PriorityRule
+                        .builder().value("priority_pd.3").type("string").operator("equal").build()))
+                .build();
+        Assertions.assertThrows(JsonMappingException.class, () ->
+        {
+            ObjectMapperSingleton.getMapper().writeValueAsString(invalidRuleList);
+        }, "Expected a json serialization exception");
+
+        // Deserialization
+        Assertions.assertThrows(MapRouletteRuntimeParseException.class, () ->
+        {
+            final RuleList actual = resourceToRuleList(
+                    "rulelist/invalid/rulelist_priorityrule_condition_typo.json");
+        }, "Expected a parse exception");
+    }
+
+    @Test
+    public void nestedRuleListConditionTypo()
+    {
+        // Serialization
+        final RuleList invalidRuleList = RuleList.builder().condition("AND")
+                .rules(Collections.singletonList(PriorityRule.builder().value("t.u").type("string")
+                        .operator("is_empty").build()))
+                .ruleList(Collections.singletonList(RuleList.builder().condition("or")
+                        .rules(Collections.singletonList(PriorityRule.builder().value("a.b")
+                                .type("string").operator("is_not_empty").build()))
+                        .build()))
+                .build();
+        Assertions.assertThrows(JsonMappingException.class, () ->
+        {
+            ObjectMapperSingleton.getMapper().writeValueAsString(invalidRuleList);
+        }, "Expected a parse exception");
+
+        // Deserialization
+        Assertions.assertThrows(MapRouletteRuntimeParseException.class, () ->
+        {
+            final RuleList actual = resourceToRuleList(
+                    "rulelist/invalid/rulelist_nested_priorityrule_condition_typo.json");
+        }, "Expected a parse exception");
+    }
+
 }
