@@ -1,0 +1,15 @@
+{
+  "condition": "AND",
+  "rules": [
+    {
+      "value": "t.u",
+      "type": "string",
+      "operator": "is_empty"
+    },
+    {
+      "_comment": "This object is not a RuleList and not a PriorityRule so an exception will be thrown",
+      "_MISSING_condition": "",
+      "_MISSING_rules": []
+    }
+  ]
+}

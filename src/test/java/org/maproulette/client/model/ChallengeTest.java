@@ -46,7 +46,7 @@ public class ChallengeTest
                 .instruction("TestInstruction")
                 .highPriorityRule(RuleList.builder().condition("AND")
                         .rules(Collections.singletonList(PriorityRule.builder().operator("equal")
-                                .type("string").value("testValue").build()))
+                                .type("string").value("test.value").build()))
                         .build())
                 .build();
         final var rule = challenge.getHighPriorityRule();
@@ -57,7 +57,7 @@ public class ChallengeTest
         final var onlyRule = ruleList.get(0);
         Assertions.assertEquals("equal", onlyRule.getOperator());
         Assertions.assertEquals("string", onlyRule.getType());
-        Assertions.assertEquals("testValue", onlyRule.getValue());
+        Assertions.assertEquals("test.value", onlyRule.getValue());
     }
 
     @Test

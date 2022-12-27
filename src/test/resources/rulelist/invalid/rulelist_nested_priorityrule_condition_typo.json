@@ -1,0 +1,21 @@
+{
+  "condition": "AND",
+  "rules": [
+    {
+      "value": "t.u",
+      "type": "string",
+      "operator": "is_empty"
+    },
+    {
+      "_comment": "Lowercase 'or' is invalid and should throw an exception. It should have been 'OR'",
+      "condition": "or",
+      "rules": [
+        {
+          "value": "a.b",
+          "type": "string",
+          "operator": "is_not_empty"
+        }
+      ]
+    }
+  ]
+}

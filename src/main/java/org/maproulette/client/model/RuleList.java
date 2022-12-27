@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import org.maproulette.client.exception.MapRouletteRuntimeParseException;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -23,6 +26,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,9 +38,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @JsonDeserialize(using = RuleList.RuleListDeserializer.class)
 @JsonSerialize(using = RuleList.RuleListSerializer.class)
+@Value
 @Slf4j
 public class RuleList implements Serializable
 {
+    public static final String CONDITION_AND = "AND";
+    public static final String CONDITION_OR = "OR";
+    private static final Set<String> VALID_CONDITIONS = Set.of(CONDITION_AND, CONDITION_OR);
+
     private static final String KEY_CONDITION = "condition";
     private static final String KEY_RULES = "rules";
     private static final long serialVersionUID = -1085774480815117637L;
@@ -55,11 +64,13 @@ public class RuleList implements Serializable
 
     public boolean isSet()
     {
-        // A condition is needed
-        if (this.condition == null || this.condition.isEmpty())
+        // The rule list is "set" if the condition is empty, and there are no rules, and there are
+        // no nested priority rules
+        if (this.condition.isEmpty() && this.rules.isEmpty() && this.ruleList.isEmpty())
         {
             return false;
         }
+
         // It is possible to have an empty 'rules' and a non-empty nested rule list.
         // It is invalid for both to be empty at the same time.
         if (this.rules.isEmpty() && this.ruleList.isEmpty())
@@ -90,22 +101,25 @@ public class RuleList implements Serializable
         {
             for (final RuleList ruleList : ruleListList)
             {
-                gen.writeStartObject();
-                gen.writeStringField("condition", ruleList.getCondition());
-                gen.writeArrayFieldStart("rules");
-                if (ruleList.getRuleList() != null)
+                final String condition = ruleList.getCondition();
+                // For nested rule lists (eg rule lists that have a parent), these REQUIRE the
+                // condition to be non-empty and valid.
+                if (!CONDITION_AND.equals(condition) && !CONDITION_OR.equals(condition))
                 {
-                    for (final RuleList nestedRuleList : ruleList.getRuleList())
-                    {
-                        serializeRuleListHelper(nestedRuleList.getRuleList(), gen);
-                    }
+                    throw new MapRouletteRuntimeParseException(
+                            String.format("Condition '%s' is not known", condition));
                 }
-                if (ruleList.getRules() != null)
+
+                gen.writeStartObject();
+                gen.writeStringField(KEY_CONDITION, ruleList.getCondition());
+                gen.writeArrayFieldStart(KEY_RULES);
+                for (final RuleList nestedRuleList : ruleList.getRuleList())
                 {
-                    for (final PriorityRule priorityRule : ruleList.getRules())
-                    {
-                        gen.writeObject(priorityRule);
-                    }
+                    serializeRuleListHelper(nestedRuleList.getRuleList(), gen);
+                }
+                for (final PriorityRule priorityRule : ruleList.getRules())
+                {
+                    gen.writeObject(priorityRule);
                 }
                 gen.writeEndArray();
                 gen.writeEndObject();
@@ -115,21 +129,24 @@ public class RuleList implements Serializable
         private void serializeRuleListAsObject(final RuleList value, final JsonGenerator gen,
                 final SerializerProvider serializers) throws IOException
         {
-            gen.writeStartObject();
-            gen.writeStringField("condition", value.getCondition());
-            gen.writeArrayFieldStart("rules");
-            if (value.getRuleList() != null)
+            final String condition = value.getCondition();
+            // A condition must be valid
+            if (!VALID_CONDITIONS.contains(condition))
             {
-                serializeRuleListHelper(value.getRuleList(), gen);
+                throw new MapRouletteRuntimeParseException(
+                        String.format("Condition '%s' is not known", condition));
             }
 
-            if (value.getRules() != null)
+            gen.writeStartObject();
+            gen.writeStringField(KEY_CONDITION, condition);
+            gen.writeArrayFieldStart(KEY_RULES);
+
+            serializeRuleListHelper(value.getRuleList(), gen);
+            for (final PriorityRule priorityRule : value.getRules())
             {
-                for (final PriorityRule priorityRule : value.getRules())
-                {
-                    gen.writeObject(priorityRule);
-                }
+                gen.writeObject(priorityRule);
             }
+
             gen.writeEndArray();
             gen.writeEndObject();
             gen.flush();
@@ -188,35 +205,58 @@ public class RuleList implements Serializable
         private static RuleList buildRuleListHelper(final JsonNode node,
                 final DeserializationContext ctxt)
         {
-            // When the serialized format lacks required values, just create an empty RuleList to
-            // avoid NPE.
-            if (node.get("condition") == null)
+            final JsonNode conditionNode = node.get(KEY_CONDITION);
+            final JsonNode rulesNode = node.get(KEY_RULES);
+
+            // If NEITHER a condition nor rules is in the object, return a dummy RuleList which will
+            // serialize to '{}'.
+            if (conditionNode == null && rulesNode == null)
             {
                 return RuleList.builder().build();
             }
-            final RuleList ret = RuleList.builder().condition(node.get("condition").asText())
-                    .ruleList(new ArrayList<>()).rules(new ArrayList<>()).build();
 
-            for (final JsonNode jsonNode : node.withArray("rules"))
+            // Both the 'condition' and 'rules' must appear, otherwise it is an invalid object.
+            if (conditionNode == null || rulesNode == null)
             {
-                if (jsonNode.get("condition") != null)
+                throw new MapRouletteRuntimeParseException(
+                        "parse error: the rulelist requires both a 'condition' and 'rules' field");
+            }
+
+            if (!VALID_CONDITIONS.contains(conditionNode.asText()))
+            {
+                throw new MapRouletteRuntimeParseException(
+                        String.format("Condition '%s' is not known", conditionNode.asText()));
+            }
+
+            final RuleListBuilder ret = RuleList.builder().condition(conditionNode.asText())
+                    .ruleList(new ArrayList<>()).rules(new ArrayList<>());
+
+            for (final JsonNode jsonNode : node.withArray(KEY_RULES))
+            {
+                if (jsonNode.get(KEY_CONDITION) != null || jsonNode.get(KEY_RULES) != null)
                 {
                     // If the child is a PriorityRule, do a recursive call to build the rule and add
                     // it to the list.
                     final RuleList child = buildRuleListHelper(jsonNode, ctxt);
-                    ret.getRuleList().add(child);
+                    ret.ruleList$value.add(child);
                 }
                 else
                 {
+                    if (jsonNode.get("type") == null || jsonNode.get("operator") == null
+                            || jsonNode.get("value") == null)
+                    {
+                        throw new MapRouletteRuntimeParseException(
+                                "Nested object is not a PriorityRule nor a RuleList! Parsing failed!");
+                    }
                     final PriorityRule priorityRule = PriorityRule.builder()
                             .type(jsonNode.get("type").asText())
                             .operator(jsonNode.get("operator").asText())
                             .value(jsonNode.get("value").asText()).build();
-                    ret.getRules().add(priorityRule);
+                    ret.rules$value.add(priorityRule);
                 }
             }
 
-            return ret;
+            return ret.build();
         }
 
         /**
