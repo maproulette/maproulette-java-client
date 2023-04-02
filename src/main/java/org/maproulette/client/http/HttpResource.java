@@ -141,7 +141,9 @@ public abstract class HttpResource implements Closeable
                 final var target = new HttpHost(this.uri.getHost(), this.uri.getPort(),
                         this.uri.getScheme());
                 final var context = HttpClientContext.create();
-                final var clientBuilder = HttpClients.custom();
+                // Create a builder that supports reading from system properties so things like
+                // proxies can be used with -Dhttp.proxyHost, -Dhttp.proxyPort.
+                final var clientBuilder = HttpClients.custom().useSystemProperties();
                 if (this.creds != null)
                 {
                     final var credsProvider = new BasicCredentialsProvider();
