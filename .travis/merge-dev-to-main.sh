@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -x
 
 GITHUB_REPO="osmlab/maproulette-java-client"
 MERGE_BRANCH=main

@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -x
 
 if [[ $TRAVIS_TEST_RESULT == 0 ]] && [[ 1 == 0 ]];
 then
