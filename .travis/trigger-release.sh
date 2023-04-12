@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -x
 
 # Use Travis to trigger a release from Main
 

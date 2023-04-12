@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -x
 
 if [ "$TRAVIS_BRANCH" = "main" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ];
 then
