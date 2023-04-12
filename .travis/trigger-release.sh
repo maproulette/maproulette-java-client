@@ -3,7 +3,7 @@ set -x
 
 # Use Travis to trigger a release from Main
 
-GITHUB_ORGANIZATION=osmlab
+GITHUB_ORGANIZATION=maproulette
 GITHUB_REPOSITORY_NAME=maproulette-java-client
 
 # Assumptions

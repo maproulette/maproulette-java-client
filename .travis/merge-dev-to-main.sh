@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -x
 
-GITHUB_REPO="osmlab/maproulette-java-client"
+GITHUB_REPO="maproulette/maproulette-java-client"
 MERGE_BRANCH=main
 SOURCE_BRANCH=dev
 
