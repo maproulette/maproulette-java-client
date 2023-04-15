@@ -12,14 +12,14 @@ plugins {
 	id "com.github.spotbugs" version "4.8.0"
 
 	// Lombok plugin and gradle compat matrix https://stackoverflow.com/a/63736421
-	id "io.freefair.lombok" version "5.0.1"
+	id "io.freefair.lombok" version "5.1.1"
 }
 
 apply from: 'dependencies.gradle'
 apply from: 'gradle/quality.gradle'
-apply from: 'gradle/deployment.gradle'
 
 description = "MapRoulette Java Client"
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 sourceCompatibility=11
 targetCompatibility=11
@@ -50,16 +50,13 @@ dependencies
     checkstyle packages.checkstyle
 }
 
-/**
- * Artifact related items
- */
 task javadocJar(type: Jar) {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from javadoc
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from sourceSets.main.allSource
 }
 
@@ -80,5 +77,73 @@ gradle.startParameter.excludedTaskNames += skippedTaskNames
 idea {
     project {
         languageLevel = '11'
+    }
+}
+
+signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+    sign publishing.publications
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact(sourcesJar)
+            artifact(javadocJar)
+
+            pom {
+                name = project_name
+                description = project_description
+                url = project_url
+
+                scm {
+                    connection = project_scm
+                    developerConnection = project_scm
+                    url = project_url
+                }
+
+                licenses {
+                    license {
+                        name = project_license_slug
+                        url = project_license_url
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = project_developer
+                        name = project_developer
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "localPublish"
+            url = layout.buildDirectory.dir('repos/localpublish')
+        }
+        if (Boolean.valueOf(project.property("publishSnapshot"))) {
+            maven {
+                name = "sonatypeSnapshots"
+                url = "https://oss.sonatype.org/content/repositories/snapshots/"
+                credentials {
+                    username = System.getenv('SONATYPE_USERNAME')
+                    password = System.getenv('SONATYPE_PASSWORD')
+                }
+            }
+        }
+        if (isReleaseVersion) {
+            maven {
+                name = sonatypeMaven2
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                credentials {
+                    username = System.getenv('SONATYPE_USERNAME')
+                    password = System.getenv('SONATYPE_PASSWORD')
+                }
+            }
+        }
     }
 }
