@@ -52,6 +52,8 @@ jobs:
         run: |
           pushd java-client
           ./gradlew build
+          # Publish the artifacts and pom to a local directory for later inspection
+          ./gradlew publish
 
       - name: Build maproulette-backend sbt
         run: |
@@ -87,7 +89,7 @@ jobs:
           popd
           pushd java-client
           ./gradlew --info --project-prop runIntegrationTests \
-            clean integrationTest \
+            integrationTest \
             --tests '*BatchUploaderIntegrationTest*' \
             --tests '*ChallengeAPIIntegrationTest*'
 
@@ -95,5 +97,5 @@ jobs:
     name: "Gradle Validation"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: gradle/wrapper-validation-action@v1.0.4
+      - uses: actions/checkout@v3
+      - uses: gradle/wrapper-validation-action@v1

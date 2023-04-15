@@ -1,0 +1,32 @@
+name: Publish package to Sonatype OSS Maven2
+on:
+  release:
+    types: [created]
+    branches: [main]
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - uses: gradle/wrapper-validation-action@v1
+      - name: Publish maproulette-java-client
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          # These three GPG vars are required to create the signed *.asc files used to validate each artifact
+          GPG_KEY_LOCATION: ${{ secrets.GPG_KEY_LOCATION }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          # Remove the '-SNAPSHOT' from the version because this is a 'release' build, not a snapshot/staging build.
+          # There are gradle ways to do this based on input properties or env, but for now keep it simple
+          sed -i "s/-SNAPSHOT//g" gradle.properties
+          ./gradlew build
+          ./gradlew publish \
+            -Psigning.secretKeyRingFile=${GPG_KEY_LOCATION} \
+            -Psigning.keyId=${GPG_KEY_ID} \
+            -Psigning.password=${GPG_PASSPHRASE}
