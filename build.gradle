@@ -137,7 +137,7 @@ publishing {
         }
         if (isReleaseVersion) {
             maven {
-                name = sonatypeMaven2
+                name = "sonatypeMaven2"
                 url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
                 credentials {
                     username = System.getenv('SONATYPE_USERNAME')
