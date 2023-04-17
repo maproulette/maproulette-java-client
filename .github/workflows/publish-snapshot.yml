@@ -3,7 +3,7 @@ on:
   workflow_run:
     workflows: [CI Build]
     types: [completed]
-    branches: [main, dev]
+    branches: [main]
 jobs:
   publish-snapshot:
     runs-on: ubuntu-latest
