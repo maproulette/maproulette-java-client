@@ -26,7 +26,7 @@ jobs:
           # There are gradle ways to do this based on input properties or env, but for now keep it simple
           sed -i "s/-SNAPSHOT//g" gradle.properties
           ./gradlew build
-          ./gradlew publish \
+          ./gradlew publish closeAndReleaseSonatypeStagingRepository \
             -Psigning.secretKeyRingFile=${GPG_KEY_LOCATION} \
             -Psigning.keyId=${GPG_KEY_ID} \
             -Psigning.password=${GPG_PASSPHRASE}
