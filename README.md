@@ -1,6 +1,6 @@
 # MapRoulette Java Client
 
-![Travis (.com)](https://img.shields.io/travis/com/maproulette/maproulette-java-client/main)
+![GitHub Action CI Build](https://github.com/maproulette/maproulette-java-client/actions/workflows/pull-request.yml/badge.svg?branch=dev)
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/org.maproulette.client/maproulette-java-client?server=https%3A%2F%2Foss.sonatype.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -23,6 +23,6 @@ Here is examples of adding the library into a project.
 ```
 dependencies
 {
-    implementation "org.maproulette.client:maproulette-java-client:0.3.2"
+    implementation "org.maproulette.client:maproulette-java-client:0.4.4"
 }
 ```
