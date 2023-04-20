@@ -51,9 +51,9 @@ jobs:
       - name: Build maproulette-java-client
         run: |
           pushd java-client
-          ./gradlew build
+          ./gradlew --info build
           # Publish the artifacts and pom to a local directory for later inspection
-          ./gradlew publish
+          ./gradlew --info publish
 
       - name: Build maproulette-backend sbt
         run: |

@@ -13,8 +13,8 @@ spotbugs {
 }
 spotbugsMain {
     reports {
-        xml.enabled = false
-        html.enabled = true
+        xml.required = false
+        html.required = true
     }
 }
 
@@ -77,8 +77,8 @@ spotless {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        csv.enabled true
+        xml.required = true
+        csv.required = true
         html.destination file("${buildDir}/reports/jacoco")
     }
 }
