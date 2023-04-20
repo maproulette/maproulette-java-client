@@ -22,10 +22,10 @@ ext {
     depHttpVersion = "4.5.1"
     depJacksonVersion = "2.9.8"
     depJacocoVersion = "0.8.3"
-    depJunitVersion = "5.5.2"
+    depJunitVersion = "5.9.2"
     depLombokVersion = "1.18.10"
-    depMockitoVersion = "2.23.0"
-    depSlf4jVersion = "1.7.12"
+    depMockitoVersion = "5.2.0"
+    depSlf4jVersion = "2.0.7"
 }
 
 apply from: 'gradle/quality.gradle'
