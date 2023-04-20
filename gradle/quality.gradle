@@ -1,11 +1,11 @@
 jacoco
 {
-    toolVersion = versions.jacoco
+    toolVersion = depJacocoVersion
 }
 
 checkstyle
 {
-    toolVersion = versions.checkstyle
+    toolVersion = depCheckstyleVersion
 }
 
 spotbugs {
