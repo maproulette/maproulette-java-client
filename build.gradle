@@ -23,7 +23,7 @@ ext {
     depJacksonVersion = "2.9.8"
     depJacocoVersion = "0.8.3"
     depJunitVersion = "5.9.2"
-    depLombokVersion = "1.18.10"
+    depLombokVersion = "1.18.16"
     depMockitoVersion = "5.2.0"
     depSlf4jVersion = "2.0.7"
 }
@@ -40,16 +40,15 @@ repositories {
     mavenCentral()
 }
 
+lombok {
+    version = depLombokVersion
+}
 
 dependencies {
     implementation "commons-lang:commons-lang:${depCommonsVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${depJacksonVersion}"
     implementation "org.slf4j:slf4j-api:${depSlf4jVersion}"
     implementation "org.apache.httpcomponents:httpclient:${depHttpVersion}"
-
-    // Lombok Annotations
-    implementation "org.projectlombok:lombok:${depLombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${depLombokVersion}"
 
     testImplementation "org.slf4j:slf4j-simple:${depSlf4jVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${depJunitVersion}"
