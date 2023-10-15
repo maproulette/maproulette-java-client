@@ -1,7 +1,6 @@
 name: CI Build
 on:
   push:
-  pull_request:
 
 jobs:
   build:
@@ -22,32 +21,21 @@ jobs:
         java: [11]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: 'java-client'
           fetch-depth: 0
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           repository: 'maproulette/maproulette-backend'
           path: 'maproulette-backend'
           fetch-depth: 0
       - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
-      - uses: actions/cache@v2.1.7
-        id: gradle-cache
-        with:
-          path: |
-            ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-      - uses: actions/cache@v2.1.7
-        id: gradle-wrapper-cache
-        with:
-          path: |
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradlewrapper-${{ hashFiles('gradle/wrapper/*') }}
+          cache: 'sbt'
       - name: Build maproulette-java-client
         run: |
           pushd java-client
@@ -97,5 +85,5 @@ jobs:
     name: "Gradle Validation"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: gradle/wrapper-validation-action@v1
