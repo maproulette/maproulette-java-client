@@ -17,7 +17,7 @@ plugins {
 }
 
 ext {
-    depCheckstyleVersion = "8.18"
+    depCheckstyleVersion = "10.12.4"
     depCommonsVersion = "2.6"
     depHttpVersion = "4.5.14"
     depJacksonVersion = "2.9.8"
