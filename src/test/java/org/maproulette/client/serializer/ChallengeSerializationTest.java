@@ -38,6 +38,7 @@ public class ChallengeSerializationTest
                 .customBasemap("customBaseMap").defaultBasemap(23)
                 .defaultBasemapId("defaultBaseMap").defaultPriority(ChallengePriority.LOW)
                 .defaultZoom(17).difficulty(ChallengeDifficulty.EXPERT).enabled(true).featured(true)
+                .preferredTags("#tag1,#tag2").preferredReviewTags("#reviewTag1,#reviewTag2")
                 .id(1234L).maxZoom(2).minZoom(3).build();
 
         final var serializedString = this.mapper.writeValueAsString(full);
@@ -64,6 +65,9 @@ public class ChallengeSerializationTest
         Assertions.assertEquals(full.getMaxZoom(), deserializedChallenge.getMaxZoom());
         Assertions.assertEquals(full.getMinZoom(), deserializedChallenge.getMinZoom());
         Assertions.assertEquals(full.getParent(), deserializedChallenge.getParent());
+        Assertions.assertEquals(full.getPreferredTags(), deserializedChallenge.getPreferredTags());
+        Assertions.assertEquals(full.getPreferredReviewTags(),
+                deserializedChallenge.getPreferredReviewTags());
     }
 
     @Test
@@ -177,6 +181,9 @@ public class ChallengeSerializationTest
         Assertions.assertNotNull(deserializedChallenge.getMediumPriorityRule());
         Assertions.assertEquals(mediumPriority, deserializedChallenge.getMediumPriorityRule());
         Assertions.assertEquals(lowPriority, deserializedChallenge.getLowPriorityRule());
+        Assertions.assertEquals("#tag1,#tag2", deserializedChallenge.getPreferredTags());
+        Assertions.assertEquals("#reviewTag1,#reviewTag2",
+                deserializedChallenge.getPreferredReviewTags());
     }
 
     /**

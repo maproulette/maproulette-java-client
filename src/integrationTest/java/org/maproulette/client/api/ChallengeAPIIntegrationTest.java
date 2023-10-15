@@ -195,6 +195,9 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
         Assertions.assertEquals(challenge1.getDefaultBasemap(), challenge2.getDefaultBasemap());
         Assertions.assertEquals(challenge1.getDefaultBasemapId(), challenge2.getDefaultBasemapId());
         Assertions.assertEquals(challenge1.getCustomBasemap(), challenge2.getCustomBasemap());
+        Assertions.assertEquals(challenge1.getPreferredTags(), challenge2.getPreferredTags());
+        Assertions.assertEquals(challenge1.getPreferredReviewTags(),
+                challenge2.getPreferredReviewTags());
     }
 
     private Challenge getBasicChallenge()

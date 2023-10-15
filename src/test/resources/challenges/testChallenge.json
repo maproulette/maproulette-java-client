@@ -34,5 +34,7 @@
         ]
       }
     ]
-  }
+  },
+  "preferredTags": "#tag1,#tag2",
+  "preferredReviewTags": "#reviewTag1,#reviewTag2"
 }
