@@ -76,6 +76,7 @@ public class ChallengeSerializationTest
         final var value = Challenge.builder().parent(1L).name("TestChallenge")
                 .instruction("TestInstruction").description("TestDescription").blurb("TestBlurb")
                 .customBasemap("customBaseMap").defaultBasemap(56)
+                .taskWidgetLayout(this.mapper.readTree("{\"key\":\"value\"}"))
                 .defaultBasemapId("defaultBaseMap").id(1234L).build();
 
         final var serializedString = this.mapper.writeValueAsString(value);
@@ -92,6 +93,10 @@ public class ChallengeSerializationTest
         Assertions.assertEquals(19, deserializedChallenge.getMaxZoom());
         Assertions.assertEquals(1, deserializedChallenge.getMinZoom());
         Assertions.assertEquals(1L, deserializedChallenge.getParent());
+        Assertions.assertEquals("value",
+                deserializedChallenge.getTaskWidgetLayout().get("key").textValue());
+        Assertions.assertEquals("{\"key\":\"value\"}",
+                deserializedChallenge.getTaskWidgetLayout().toString());
     }
 
     /**
@@ -114,6 +119,10 @@ public class ChallengeSerializationTest
         Assertions.assertFalse(deserializedChallenge.getHighPriorityRule().isSet());
         Assertions.assertFalse(deserializedChallenge.getMediumPriorityRule().isSet());
         Assertions.assertFalse(deserializedChallenge.getLowPriorityRule().isSet());
+        Assertions.assertEquals("value",
+                deserializedChallenge.getTaskWidgetLayout().get("key").textValue());
+        Assertions.assertEquals("{\"key\":\"value\"}",
+                deserializedChallenge.getTaskWidgetLayout().toString());
     }
 
     /**
@@ -137,6 +146,7 @@ public class ChallengeSerializationTest
         Assertions.assertFalse(deserializedChallenge.getHighPriorityRule().isSet());
         Assertions.assertFalse(deserializedChallenge.getMediumPriorityRule().isSet());
         Assertions.assertFalse(deserializedChallenge.getLowPriorityRule().isSet());
+        Assertions.assertEquals("\"{}\"", deserializedChallenge.getTaskWidgetLayout().toString());
     }
 
     /**
@@ -184,6 +194,7 @@ public class ChallengeSerializationTest
         Assertions.assertEquals("#tag1,#tag2", deserializedChallenge.getPreferredTags());
         Assertions.assertEquals("#reviewTag1,#reviewTag2",
                 deserializedChallenge.getPreferredReviewTags());
+        Assertions.assertNull(deserializedChallenge.getTaskWidgetLayout());
     }
 
     /**

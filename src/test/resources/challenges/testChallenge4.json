@@ -3,5 +3,8 @@
   "description": "DESCRIPTION",
   "blurb": "BLURB",
   "instruction": "INSTRUCTION",
-  "difficulty": "NORMAL"
+  "difficulty": "NORMAL",
+  "taskWidgetLayout": {
+    "key": "value"
+  }
 }

@@ -17,6 +17,7 @@ import org.maproulette.client.model.ChallengePriority;
 import org.maproulette.client.model.PriorityRule;
 import org.maproulette.client.model.RuleList;
 import org.maproulette.client.model.Task;
+import org.maproulette.client.utilities.ObjectMapperSingleton;
 
 /**
  * @author mcuthbert
@@ -82,6 +83,8 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
                 .mediumPriorityRule(this.getRuleList("AND", "pr.medium"))
                 .lowPriorityRule(this.getRuleList("OR", "pr.low")).defaultZoom(11).minZoom(10)
                 .maxZoom(12).defaultBasemapId("defaultBaseMap").defaultBasemap(67)
+                .taskWidgetLayout(ObjectMapperSingleton.getMapper().createObjectNode()
+                        .put("testKey", "testValue"))
                 .customBasemap("customBasemap").build();
 
         final var updatedChallenge = this.getChallengeAPI().update(toUpdateChallenge);
@@ -116,6 +119,12 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
         Assertions.assertNotEquals(createdChallenge.getCustomBasemap(),
                 updatedChallenge.getCustomBasemap());
         Assertions.assertTrue(updatedChallenge.getHighPriorityRule().getCondition().equals("OR"));
+
+        // Check that taskWidgetLayout was updated to a json object with "testKey" : "testValue"
+        Assertions.assertTrue(updatedChallenge.getTaskWidgetLayout().isObject());
+        Assertions.assertTrue(updatedChallenge.getTaskWidgetLayout().get("testKey").isTextual());
+        Assertions.assertEquals("testValue",
+                updatedChallenge.getTaskWidgetLayout().get("testKey").asText());
     }
 
     @Test
@@ -198,6 +207,9 @@ public class ChallengeAPIIntegrationTest extends IntegrationBase
         Assertions.assertEquals(challenge1.getPreferredTags(), challenge2.getPreferredTags());
         Assertions.assertEquals(challenge1.getPreferredReviewTags(),
                 challenge2.getPreferredReviewTags());
+
+        // Check that the returned task widget layout is a json object
+        Assertions.assertTrue(challenge2.getTaskWidgetLayout().isObject());
     }
 
     private Challenge getBasicChallenge()

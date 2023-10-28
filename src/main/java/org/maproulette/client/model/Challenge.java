@@ -2,12 +2,15 @@ package org.maproulette.client.model;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import org.maproulette.client.exception.MapRouletteException;
 import org.maproulette.client.utilities.Utilities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,6 +79,8 @@ public class Challenge implements IMapRouletteObject, Serializable
     private String[] tags;
     @Builder.Default
     private boolean changesetUrl = false;
+    @Nullable
+    private JsonNode taskWidgetLayout;
 
     public static Challenge fromJson(final String json) throws MapRouletteException
     {

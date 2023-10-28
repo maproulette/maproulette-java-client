@@ -3,5 +3,6 @@
   "blurb": "BLURB",
   "instruction": "INSTRUCTION",
   "difficulty": "NORMAL",
-  "defaultPriority": "NONE"
+  "defaultPriority": "NONE",
+  "taskWidgetLayout": "{}"
 }
