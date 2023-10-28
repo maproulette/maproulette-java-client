@@ -79,7 +79,8 @@ jobs:
           ./gradlew --info --project-prop runIntegrationTests \
             integrationTest \
             --tests '*BatchUploaderIntegrationTest*' \
-            --tests '*ChallengeAPIIntegrationTest*'
+            --tests '*ChallengeAPIIntegrationTest*' \
+            --tests '*ProjectAPIIntegrationTest*'
 
   validation:
     name: "Gradle Validation"

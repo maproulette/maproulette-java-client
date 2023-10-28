@@ -26,6 +26,7 @@ public class ProjectAPIIntegrationTest extends IntegrationBase
         final var projectIdentifier = this.getProjectAPIForNewConfiguration().create(project)
                 .getId();
         Assertions.assertNotEquals(-1, projectIdentifier);
+        Assertions.assertTrue(this.getProjectAPI().forceDelete(projectIdentifier));
     }
 
     @Test
@@ -111,6 +112,7 @@ public class ProjectAPIIntegrationTest extends IntegrationBase
         Assertions.assertEquals(numberOfChildren, challenges.size());
         challenges.forEach(
                 challenge -> Assertions.assertTrue(challengeList.contains(challenge.getId())));
+        Assertions.assertTrue(this.getProjectAPI().forceDelete(parentIdentifier));
     }
 
     private void compare(final Project project1, final Project project2)
