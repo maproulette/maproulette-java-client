@@ -88,7 +88,8 @@ public class IntegrationBase
         if (this.configuration == null)
         {
             this.configurationParamsSetUp();
-            this.configuration = new MapRouletteConfiguration(this.host, this.port, this.apiKey);
+            this.configuration = new MapRouletteConfiguration(this.scheme, this.host, this.port,
+                    this.apiKey);
         }
         return this.configuration;
     }
