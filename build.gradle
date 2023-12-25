@@ -20,7 +20,7 @@ ext {
     depCheckstyleVersion = "8.18"
     depCommonsVersion = "2.6"
     depHttpVersion = "4.5.14"
-    depJacksonVersion = "2.15.3"
+    depJacksonVersion = "2.16.1"
     depJacocoVersion = "0.8.3"
     depJunitVersion = "5.10.1"
     depLombokVersion = "1.18.16"
