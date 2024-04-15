@@ -25,7 +25,7 @@ ext {
     depJunitVersion = "5.10.1"
     depLombokVersion = "1.18.16"
     depMockitoVersion = "5.11.0"
-    depSlf4jVersion = "2.0.12"
+    depSlf4jVersion = "2.0.13"
 }
 
 apply from: 'gradle/quality.gradle'
