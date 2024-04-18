@@ -100,7 +100,7 @@ public class TaskAPIIntegrationTest extends IntegrationBase
                 .get(updatedTask.getId());
         Assertions.assertTrue(retrievedUpdatedTask.isPresent());
 
-        Assertions.assertEquals("{\"features\":["
+        Assertions.assertEquals("{\"type\":\"FeatureCollection\",\"features\":["
                 + String.format(TestConstants.FEATURE_STRING, 3.1, 4.2, UPDATED_GEOMETRY) + "]}",
                 retrievedUpdatedTask.get().getGeometries().toString());
     }
@@ -134,7 +134,7 @@ public class TaskAPIIntegrationTest extends IntegrationBase
         this.compare(updatedTask, retrievedUpdatedTask.get());
         Assertions
                 .assertEquals(
-                        "{\"features\":["
+                        "{\"type\":\"FeatureCollection\",\"features\":["
                                 + String.format(
                                         TestConstants.FEATURE_STRING, 1.1, 2.2, DEFAULT_GEOMETRY)
                                 + ","
@@ -151,7 +151,8 @@ public class TaskAPIIntegrationTest extends IntegrationBase
         Assertions.assertEquals(ChallengePriority.HIGH, task2.getPriority());
         Assertions.assertEquals(task1.getParent(), task2.getParent());
         Assertions.assertEquals(task1.getInstruction(), task2.getInstruction());
-        Assertions.assertEquals(task1.getGeometries(), task2.getGeometries());
+        Assertions.assertEquals(task1.getGeometries().get("features"),
+                task2.getGeometries().get("features"));
     }
 
     private Task getDefaultTask(final String name)
