@@ -80,7 +80,8 @@ jobs:
             integrationTest \
             --tests '*BatchUploaderIntegrationTest*' \
             --tests '*ChallengeAPIIntegrationTest*' \
-            --tests '*ProjectAPIIntegrationTest*'
+            --tests '*ProjectAPIIntegrationTest*' \
+            --tests '*TaskAPIIntegrationTest*'
 
   validation:
     name: "Gradle Validation"
