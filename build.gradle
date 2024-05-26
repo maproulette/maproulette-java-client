@@ -24,7 +24,7 @@ ext {
     depJacocoVersion = "0.8.3"
     depJunitVersion = "5.10.2"
     depLombokVersion = "1.18.32"
-    depMockitoVersion = "5.11.0"
+    depMockitoVersion = "5.12.0"
     depSlf4jVersion = "2.0.13"
 }
 
