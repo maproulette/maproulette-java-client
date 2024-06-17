@@ -9,7 +9,7 @@ plugins {
     id "com.diffplug.spotless" version "6.25.0"
     id "org.sonarqube" version "5.0.0.4638"
     // Spotbugs gradle plugin version to spotbugs version https://github.com/spotbugs/spotbugs-gradle-plugin#spotbugs-version-mapping
-    id "com.github.spotbugs" version "6.0.14"
+    id "com.github.spotbugs" version "6.0.17"
 
     // Lombok plugin and gradle compat matrix https://github.com/freefair/gradle-plugins#compatibility-matrix
     id "io.freefair.lombok" version "6.6.3"
